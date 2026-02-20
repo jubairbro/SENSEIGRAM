@@ -3,13 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
     <application
         android:name=".SenseiGramApp"
@@ -19,40 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SenseiGram"
-        android:usesCleartextTraffic="true"
         tools:targetApi="34">
         
         <activity
-            android:name=".ui.activities.SplashActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true"
-            android:theme="@style/Theme.SenseiGram.Splash">
+            android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name=".ui.activities.LoginActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false" />
-            
-        <activity
-            android:name=".ui.activities.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-            
-        <activity
-            android:name=".ui.activities.SavedChatsActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false" />
-            
-        <activity
-            android:name=".ui.activities.SettingsActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false" />
 
     </application>
 
