@@ -54,13 +54,10 @@
 
 ## Download
 
-### Latest Release
-Download the latest APK from [Releases](https://github.com/jubairbro/SENSEIGRAM/releases/latest)
+### Build Status
+APK স্বয়ংক্রিয়ভাবে GitHub Actions দ্বারা build হবে। Build complete হলে [Actions](https://github.com/jubairbro/SENSEIGRAM/actions) page থেকে APK ডাউনলোড করতে পারবেন।
 
-| Variant | Description |
-|---------|-------------|
-| `app-debug.apk` | Debug build with logging |
-| `app-release.apk` | Release build (optimized) |
+> **Note**: প্রথম build হতে কিছু সময় লাগতে পারে। [Actions tab](https://github.com/jubairbro/SENSEIGRAM/actions) এ গিয়ে build status দেখুন।
 
 ### Requirements
 - Android 7.0 (API 24) or higher
@@ -191,9 +188,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Telegram Channel**: [Join Here](https://t.me/+5ygHfkZxVBc0Mjdl)
 - **Issues**: [GitHub Issues](https://github.com/jubairbro/SENSEIGRAM/issues)
-
----
-
-<div align="center">
-    Made with ❤️ by <a href="https://github.com/jubairbro">Smart Dev</a>
-</div>
