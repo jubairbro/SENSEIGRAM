@@ -56,7 +56,7 @@ class PreferenceManager(private val context: Context) {
         try {
             val json = prefs[KEY_SAVED_CHATS] ?: "[]"
             val type = object : TypeToken<List<SavedChat>>() {}.type
-            gson.fromJson(json, type)
+            gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
             emptyList()
         }
@@ -66,7 +66,7 @@ class PreferenceManager(private val context: Context) {
         try {
             val json = prefs[KEY_DRAFTS] ?: "[]"
             val type = object : TypeToken<List<MessageDraft>>() {}.type
-            gson.fromJson(json, type)
+            gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
             emptyList()
         }
@@ -116,7 +116,7 @@ class PreferenceManager(private val context: Context) {
     }
     
     suspend fun addSavedChat(chat: SavedChat) {
-        val current = savedChats.map { it.toMutableList() }.first()
+        val current = savedChats.first().toMutableList()
         if (current.none { it.id == chat.id }) {
             current.add(0, chat)
             setSavedChats(current)
@@ -124,7 +124,7 @@ class PreferenceManager(private val context: Context) {
     }
     
     suspend fun removeSavedChat(chatId: Long) {
-        val current = savedChats.map { it.toMutableList() }.first()
+        val current = savedChats.first().toMutableList()
         current.removeAll { it.id == chatId }
         setSavedChats(current)
     }
@@ -136,13 +136,13 @@ class PreferenceManager(private val context: Context) {
     }
     
     suspend fun addDraft(draft: MessageDraft) {
-        val current = drafts.map { it.toMutableList() }.first()
+        val current = drafts.first().toMutableList()
         current.add(0, draft)
         setDrafts(current.take(10))
     }
     
     suspend fun removeDraft(draftId: String) {
-        val current = drafts.map { it.toMutableList() }.first()
+        val current = drafts.first().toMutableList()
         current.removeAll { it.id == draftId }
         setDrafts(current)
     }
