@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#10B981</color>
+    <color name="primary_dark">#059669</color>
+    <color name="primary_light">#34D399</color>
+    <color name="secondary">#6366F1</color>
+    <color name="accent">#F59E0B</color>
+    
+    <color name="emerald">#10B981</color>
+    <color name="blue">#3B82F6</color>
+    <color name="violet">#8B5CF6</color>
+    <color name="rose">#F43F5E</color>
+    <color name="amber">#F59E0B</color>
+    
+    <color name="background">#F8FAFC</color>
+    <color name="background_dark">#0F172A</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_dark">#1E293B</color>
+    
+    <color name="text_primary">#0F172A</color>
+    <color name="text_primary_dark">#F1F5F9</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_secondary_dark">#94A3B8</color>
+    
+    <color name="divider">#E2E8F0</color>
+    <color name="divider_dark">#334155</color>
+    
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_background_dark">#1E293B</color>
+    
+    <color name="error">#EF4444</color>
+    <color name="success">#22C55E</color>
+    <color name="warning">#F59E0B</color>
+    <color name="info">#3B82F6</color>
+    
+    <color name="telegram_blue">#0088CC</color>
+    <color name="ripple">#1A000000</color>
+    <color name="ripple_dark">#1AFFFFFF</color>
+    
+    <color name="glass_background">#80FFFFFF</color>
+    <color name="glass_background_dark">#800F172A</color>
+</resources>
