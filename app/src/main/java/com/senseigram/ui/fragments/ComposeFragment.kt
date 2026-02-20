@@ -20,6 +20,7 @@ import com.senseigram.R
 import com.senseigram.SenseiGramApp
 import com.senseigram.data.model.*
 import com.senseigram.data.remote.TelegramService
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream

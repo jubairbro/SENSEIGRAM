@@ -13,6 +13,7 @@ import com.senseigram.data.remote.TelegramService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SavedChatsActivity : AppCompatActivity() {

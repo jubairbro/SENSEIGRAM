@@ -15,6 +15,7 @@ import com.senseigram.SenseiGramApp
 import com.senseigram.data.model.SavedChat
 import com.senseigram.ui.adapters.SavedChatsAdapter
 import com.senseigram.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
