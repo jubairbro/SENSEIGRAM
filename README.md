@@ -6,10 +6,11 @@
 **Telegram Bot Manager**
     
 A professional serverless Telegram bot management tool for Android.
+
 [![Build APK](https://github.com/jubairbro/SENSEIGRAM/actions/workflows/build.yml/badge.svg)](https://github.com/jubairbro/SENSEIGRAM/actions/workflows/build.yml)
-    [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
-    [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-    [![Kotlin](https://img.shields.io/badge/Kotlin-1.9.22-purple.svg)](https://kotlinlang.org)
+[![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.22-purple.svg)](https://kotlinlang.org)
 </div>
 
 ---
@@ -54,9 +55,9 @@ A professional serverless Telegram bot management tool for Android.
 ## Download
 
 ### Build Status
-APK স্বয়ংক্রিয়ভাবে GitHub Actions দ্বারা build হবে। Build complete হলে [Actions](https://github.com/jubairbro/SENSEIGRAM/actions) page থেকে APK ডাউনলোড করতে পারবেন।
+APK is automatically built by GitHub Actions. Once build is complete, download APK from [Actions](https://github.com/jubairbro/SENSEIGRAM/actions) page.
 
-> **Note**: প্রথম build হতে কিছু সময় লাগতে পারে। [Actions tab](https://github.com/jubairbro/SENSEIGRAM/actions) এ গিয়ে build status দেখুন।
+> **Note**: First build may take a few minutes. Check [Actions tab](https://github.com/jubairbro/SENSEIGRAM/actions) for build status.
 
 ### Requirements
 - Android 7.0 (API 24) or higher
@@ -67,7 +68,7 @@ APK স্বয়ংক্রিয়ভাবে GitHub Actions দ্বা
 
 ## Installation
 
-1. Download the APK from [Releases](https://github.com/jubairbro/SENSEIGRAM/releases/latest)
+1. Download the APK from [Actions](https://github.com/jubairbro/SENSEIGRAM/actions) or [Releases](https://github.com/jubairbro/SENSEIGRAM/releases)
 2. Enable "Install from Unknown Sources" in your device settings
 3. Open the downloaded APK and install
 4. Launch SenseiGram and enter your bot token
@@ -89,7 +90,7 @@ APK স্বয়ংক্রিয়ভাবে GitHub Actions দ্বা
 4. Your bot is now connected!
 
 ### 3. Add Target Chats
-1. Go to Menu → Targets
+1. Go to Menu -> Targets
 2. Enter channel/group username or ID
 3. Tap the + button to save
 
@@ -111,18 +112,9 @@ APK স্বয়ংক্রিয়ভাবে GitHub Actions দ্বা
 
 ### Build Steps
 ```bash
-# Clone the repository
 git clone https://github.com/jubairbro/SENSEIGRAM.git
 cd SENSEIGRAM
-
-# Build debug APK
 ./gradlew assembleDebug
-
-# Build release APK
-./gradlew assembleRelease
-
-# Install on connected device
-./gradlew installDebug
 ```
 
 ---
@@ -159,27 +151,8 @@ app/src/main/java/com/senseigram/
 │   ├── adapters/        # RecyclerView adapters
 │   └── viewmodel/       # ViewModels
 ├── utils/               # Utility classes
-├── services/            # Android services
 └── SenseiGramApp.kt     # Application class
 ```
-
----
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
