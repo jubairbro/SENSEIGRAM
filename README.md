@@ -1,11 +1,11 @@
 <div align="center">
     <img src="https://github.com/jubairbro/Faw/raw/refs/heads/main/photos/Icons/app_icon.png" width="120" height="120" alt="SenseiGram Logo">
     
-    ## SenseiGram
+## SenseiGram
     
-    **Telegram Bot Manager**
+**Telegram Bot Manager**
     
-    A professional serverless Telegram bot management tool for Android.
+A professional serverless Telegram bot management tool for Android.
 [![Build APK](https://github.com/jubairbro/SENSEIGRAM/actions/workflows/build.yml/badge.svg)](https://github.com/jubairbro/SENSEIGRAM/actions/workflows/build.yml)
     [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
     [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
