@@ -30,34 +30,6 @@ jobs:
     
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
-      if: success()
       with:
         name: senseigram-debug
         path: app/build/outputs/apk/debug/app-debug.apk
-    
-    - name: Create Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v1.0.${{ github.run_number }}
-        name: SenseiGram v1.0.${{ github.run_number }}
-        body: |
-          ## SenseiGram - Telegram Bot Manager
-          
-          ### Features
-          - Bot Connection with Token Validation
-          - Message Composer with Media Support
-          - Saved Chats Management
-          - Theme Customization (Light/Dark/AMOLED)
-          - Accent Color Selection
-          - Subscription Dialog
-          - Remote Announcement System
-          
-          ### Download
-          - Download the APK from the assets below
-          - Enable "Install from Unknown Sources" on your device
-          - Install and enjoy!
-          
-        files: app/build/outputs/apk/debug/app-debug.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
