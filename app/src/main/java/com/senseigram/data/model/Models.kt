@@ -31,6 +31,7 @@ data class SendMessageResult(
     val chat: TelegramChat
 )
 
+@Serializable
 data class SavedChat(
     val id: Long,
     val title: String,
