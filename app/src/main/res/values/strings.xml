@@ -1,4 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SenseiGram</string>
+    
+    <string name="bot_token">Bot Token</string>
+    <string name="enter_token">Enter bot token</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connected_as">Connected as %s</string>
+    
+    <string name="connected_bot">Connected Bot</string>
+    <string name="saved_chats">Saved Chats</string>
+    <string name="no_chats">No saved chats</string>
+    <string name="add_chat">Add Chat</string>
+    <string name="chat_id_or_username">Chat ID or @username</string>
+    <string name="chat_added">Chat added</string>
+    <string name="delete">Delete</string>
+    
+    <string name="compose_message">Compose Message</string>
+    <string name="chat_id">Chat ID</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
+    <string name="enter_chat_id">Enter chat ID</string>
+    <string name="enter_message">Enter message</string>
+    <string name="message_sent">Message sent</string>
+    
+    <string name="subscription_title">Subscribe</string>
+    <string name="subscription_message">Join our channel for updates and tips!</string>
+    <string name="subscribe_now">Subscribe</string>
+    <string name="maybe_later">Later</string>
+    <string name="dont_show_again">Don\'t show again</string>
+    
+    <string name="text_secondary">#757575</string>
 </resources>
