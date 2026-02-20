@@ -2,23 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:gravity="center_horizontal">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/primary"/>
+        android:textColor="@color/primary"
+        android:layout_marginBottom="32dp"/>
 
     <TextView
+        android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Telegram Bot Manager"
-        android:textSize="16sp"/>
+        android:text="Not connected"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bot Token">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="Connect"/>
+
+    <Button
+        android:id="@+id/btnDisconnect"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="Disconnect"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Button.OutlinedButton"/>
 
 </LinearLayout>
