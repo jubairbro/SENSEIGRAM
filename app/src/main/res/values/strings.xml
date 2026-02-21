@@ -1,4 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SenseiGram</string>
+    
+    <!-- Login -->
+    <string name="login_title">Connect Your Bot</string>
+    <string name="login_subtitle">Enter your Telegram bot token to get started</string>
+    <string name="hint_bot_token">Bot Token</string>
+    <string name="btn_connect">Connect Bot</string>
+    <string name="error_invalid_token">Invalid bot token. Please check and try again.</string>
+    <string name="error_connection">Connection failed. Please check your internet.</string>
+    <string name="token_hint">Get your bot token from @BotFather on Telegram</string>
+    
+    <!-- Main -->
+    <string name="welcome">Welcome</string>
+    <string name="no_saved_chats">No Saved Chats</string>
+    <string name="no_saved_chats_desc">Add chats to quickly send messages</string>
+    <string name="recent_drafts">Recent Drafts</string>
+    <string name="no_drafts">No drafts yet</string>
+    <string name="add_chat">Add Chat</string>
+    <string name="compose_message">Compose Message</string>
+    
+    <!-- Compose -->
+    <string name="select_chat">Select Chat</string>
+    <string name="enter_chat_id">Enter Chat ID</string>
+    <string name="chat_id_hint">e.g., @channel, -100123456789, or username</string>
+    <string name="message_type">Message Type</string>
+    <string name="type_text">Text</string>
+    <string name="type_photo">Photo</string>
+    <string name="type_video">Video</string>
+    <string name="type_document">Document</string>
+    <string name="enter_message">Enter your message</string>
+    <string name="media_url">Media URL (optional)</string>
+    <string name="upload_file">Upload File</string>
+    <string name="or_enter_url">or enter URL</string>
+    <string name="inline_buttons">Inline Buttons</string>
+    <string name="add_button">Add Button</string>
+    <string name="button_text">Button Text</string>
+    <string name="button_url">Button URL</string>
+    <string name="button_color">Button Color</string>
+    <string name="settings">Settings</string>
+    <string name="silent_mode">Silent Mode</string>
+    <string name="protect_content">Protect Content</string>
+    <string name="preview_spoiler">Preview as Spoiler</string>
+    <string name="send_message">Send Message</string>
+    <string name="update_message">Update Message</string>
+    <string name="save_draft">Save Draft</string>
+    <string name="message_sent">Message sent successfully!</string>
+    <string name="message_updated">Message updated!</string>
+    <string name="error_send">Failed to send message</string>
+    
+    <!-- Theme -->
+    <string name="theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="theme_amoled">AMOLED</string>
+    <string name="accent_color">Accent Color</string>
+    
+    <!-- Menu -->
+    <string name="bot_settings">Bot Settings</string>
+    <string name="saved_chats">Saved Chats</string>
+    <string name="user_lookup">User Lookup</string>
+    <string name="disconnect">Disconnect Bot</string>
+    <string name="about">About</string>
+    
+    <!-- Dialogs -->
+    <string name="save_chat">Save Chat</string>
+    <string name="chat_name">Chat Name</string>
+    <string name="chat_id">Chat ID</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="confirm_delete">Delete this chat?</string>
+    
+    <!-- Colors -->
+    <string name="color_default">Default</string>
+    <string name="color_primary">Primary</string>
+    <string name="color_success">Success</string>
+    <string name="color_danger">Danger</string>
+    <string name="color_warning">Warning</string>
+    
+    <!-- Misc -->
+    <string name="loading">Loading...</string>
+    <string name="retry">Retry</string>
+    <string name="ok">OK</string>
+    <string name="connected_as">Connected as</string>
+    <string name="bot_username">\@%s</string>
+    <string name="clear_draft">Clear Draft</string>
+    <string name="draft_saved">Draft saved</string>
 </resources>

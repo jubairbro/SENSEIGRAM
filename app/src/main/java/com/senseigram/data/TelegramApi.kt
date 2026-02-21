@@ -1,15 +1,15 @@
 package com.senseigram.data
 
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.File
-import java.util.concurrent.TimeUnit
 
 object TelegramApi {
     private val client = OkHttpClient.Builder()
@@ -23,7 +23,7 @@ object TelegramApi {
             val res = call(token, "getMe")
             if (res.optBoolean("ok")) {
                 val r = res.getJSONObject("result")
-                Bot(r.getLong("id"), r.getString("first_name"), r.optString("username"))
+                Bot(r.getLong("id"), r.getString("first_name"), r.optString("username").ifEmpty { null })
             } else null
         } catch (e: Exception) { null }
     }
@@ -34,66 +34,152 @@ object TelegramApi {
             val res = call(token, "getChat", body)
             if (res.optBoolean("ok")) {
                 val r = res.getJSONObject("result")
-                Chat(r.getLong("id"), r.optString("title"), r.optString("username"), r.getString("type"))
+                Chat(r.getLong("id"), r.optString("title").ifEmpty { null }, r.optString("username").ifEmpty { null }, r.getString("type"))
             } else null
         } catch (e: Exception) { null }
     }
     
-    suspend fun sendMessage(
-        token: String,
-        chatId: String,
-        text: String,
-        buttons: List<List<InlineBtn>>? = null,
-        parseMode: String = "HTML"
-    ): Boolean = withContext(Dispatchers.IO) {
+    suspend fun sendMessage(token: String, chatId: String, text: String, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, disablePreview: Boolean): Boolean = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
                 put("text", text)
-                put("parse_mode", parseMode)
-                buttons?.let { put("reply_markup", buildKeyboard(it)) }
+                put("parse_mode", "HTML")
+                if (silent) put("disable_notification", true)
+                if (protect) put("protect_content", true)
+                if (disablePreview) put("disable_web_page_preview", true)
+                if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
             }
-            val res = call(token, "sendMessage", json.toString().toRequestBody("application/json".toMediaType()))
-            res.optBoolean("ok")
+            call(token, "sendMessage", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
         } catch (e: Exception) { false }
     }
     
-    suspend fun sendPhoto(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+    suspend fun sendPhoto(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("chat_id", chatId)
                 .addFormDataPart("photo", file.name, file.asRequestBody("image/*".toMediaType()))
                 .apply { caption?.let { addFormDataPart("caption", it); addFormDataPart("parse_mode", "HTML") } }
-                .apply { buttons?.let { addFormDataPart("reply_markup", buildKeyboard(it).toString()) } }
+                .apply { if (silent) addFormDataPart("disable_notification", "true") }
+                .apply { if (protect) addFormDataPart("protect_content", "true") }
+                .apply { if (spoiler) addFormDataPart("has_spoiler", "true") }
+                .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
             call(token, "sendPhoto", body).optBoolean("ok")
         } catch (e: Exception) { false }
     }
     
-    suspend fun sendVideo(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+    suspend fun sendPhotoByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("photo", url)
+                caption?.let { put("caption", it); put("parse_mode", "HTML") }
+                if (silent) put("disable_notification", true)
+                if (protect) put("protect_content", true)
+                if (spoiler) put("has_spoiler", true)
+                if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "sendPhoto", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    suspend fun sendVideo(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("chat_id", chatId)
                 .addFormDataPart("video", file.name, file.asRequestBody("video/*".toMediaType()))
                 .apply { caption?.let { addFormDataPart("caption", it); addFormDataPart("parse_mode", "HTML") } }
-                .apply { buttons?.let { addFormDataPart("reply_markup", buildKeyboard(it).toString()) } }
+                .apply { if (silent) addFormDataPart("disable_notification", "true") }
+                .apply { if (protect) addFormDataPart("protect_content", "true") }
+                .apply { if (spoiler) addFormDataPart("has_spoiler", "true") }
+                .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
             call(token, "sendVideo", body).optBoolean("ok")
         } catch (e: Exception) { false }
     }
     
-    suspend fun sendDocument(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+    suspend fun sendVideoByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("video", url)
+                caption?.let { put("caption", it); put("parse_mode", "HTML") }
+                if (silent) put("disable_notification", true)
+                if (protect) put("protect_content", true)
+                if (spoiler) put("has_spoiler", true)
+                if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "sendVideo", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    suspend fun sendDocument(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean): Boolean = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("chat_id", chatId)
                 .addFormDataPart("document", file.name, file.asRequestBody("*/*".toMediaType()))
                 .apply { caption?.let { addFormDataPart("caption", it); addFormDataPart("parse_mode", "HTML") } }
-                .apply { buttons?.let { addFormDataPart("reply_markup", buildKeyboard(it).toString()) } }
+                .apply { if (silent) addFormDataPart("disable_notification", "true") }
+                .apply { if (protect) addFormDataPart("protect_content", "true") }
+                .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
             call(token, "sendDocument", body).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    suspend fun sendDocumentByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("document", url)
+                caption?.let { put("caption", it); put("parse_mode", "HTML") }
+                if (silent) put("disable_notification", true)
+                if (protect) put("protect_content", true)
+                if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "sendDocument", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    // Edit operations
+    suspend fun editMessageText(token: String, chatId: String, msgId: Long, text: String, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("message_id", msgId)
+                put("text", text)
+                put("parse_mode", "HTML")
+                if (buttons != null) put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "editMessageText", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    suspend fun editMessageCaption(token: String, chatId: String, msgId: Long, caption: String, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("message_id", msgId)
+                put("caption", caption)
+                put("parse_mode", "HTML")
+                if (buttons != null) put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "editMessageCaption", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
+        } catch (e: Exception) { false }
+    }
+    
+    suspend fun editMessageReplyMarkup(token: String, chatId: String, msgId: Long, buttons: List<List<InlineBtn>>): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("chat_id", chatId)
+                put("message_id", msgId)
+                put("reply_markup", buildKeyboard(buttons))
+            }
+            call(token, "editMessageReplyMarkup", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
         } catch (e: Exception) { false }
     }
     
@@ -120,4 +206,18 @@ object TelegramApi {
             .build()
         return JSONObject(client.newCall(req).execute().body?.string() ?: "{}")
     }
+}
+
+object AccentColors {
+    val colors = listOf(
+        Triple("Emerald", 0xFF10B981.toInt(), 0xFF059669.toInt()),
+        Triple("Blue", 0xFF3B82F6.toInt(), 0xFF1D4ED8.toInt()),
+        Triple("Violet", 0xFF8B5CF6.toInt(), 0xFF6D28D9.toInt()),
+        Triple("Rose", 0xFFF43F5E.toInt(), 0xFFBE123C.toInt()),
+        Triple("Amber", 0xFFF59E0B.toInt(), 0xFFB45309.toInt())
+    )
+    
+    fun get(index: Int) = colors.getOrElse(index) { colors[0] }
+    fun getPrimary(index: Int) = get(index).second
+    fun getDark(index: Int) = get(index).third
 }

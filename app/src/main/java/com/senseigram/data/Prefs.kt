@@ -1,41 +1,58 @@
 package com.senseigram.data
 
-import com.senseigram.App
+import android.content.Context
+import android.content.SharedPreferences
 import org.json.JSONArray
 import org.json.JSONObject
 
-object Prefs {
+class Prefs(private val ctx: Context) {
+    private val p: SharedPreferences = ctx.getSharedPreferences("senseigram", Context.MODE_PRIVATE)
+    
     var token: String
-        get() = App.prefs().getString("token", "") ?: ""
-        set(v) = App.prefs().edit().putString("token", v).apply()
+        get() = p.getString("token", "") ?: ""
+        set(v) = p.edit().putString("token", v).apply()
     
     var botName: String
-        get() = App.prefs().getString("botName", "") ?: ""
-        set(v) = App.prefs().edit().putString("botName", v).apply()
+        get() = p.getString("botName", "") ?: ""
+        set(v) = p.edit().putString("botName", v).apply()
     
     var botUsername: String
-        get() = App.prefs().getString("botUser", "") ?: ""
-        set(v) = App.prefs().edit().putString("botUser", v).apply()
+        get() = p.getString("botUser", "") ?: ""
+        set(v) = p.edit().putString("botUser", v).apply()
     
     var seenSub: Boolean
-        get() = App.prefs().getBoolean("seenSub", false)
-        set(v) = App.prefs().edit().putBoolean("seenSub", v).apply()
+        get() = p.getBoolean("seenSub", false)
+        set(v) = p.edit().putBoolean("seenSub", v).apply()
     
-    var theme: Int
-        get() = App.prefs().getInt("theme", 0)
-        set(v) = App.prefs().edit().putInt("theme", v).apply()
+    var seenTut: Boolean
+        get() = p.getBoolean("seenTut", false)
+        set(v) = p.edit().putBoolean("seenTut", v).apply()
     
-    var accent: String
-        get() = App.prefs().getString("accent", "emerald") ?: "emerald"
-        set(v) = App.prefs().edit().putString("accent", v).apply()
+    var theme: Int // 0=light, 1=dark, 2=amoled, 3=system
+        get() = p.getInt("theme", 3)
+        set(v) = p.edit().putInt("theme", v).apply()
     
+    var accent: Int // 0=emerald, 1=blue, 2=violet, 3=rose, 4=amber
+        get() = p.getInt("accent", 0)
+        set(v) = p.edit().putInt("accent", v).apply()
+    
+    var userName: String
+        get() = p.getString("userName", "") ?: ""
+        set(v) = p.edit().putString("userName", v).apply()
+    
+    // Saved Chats
     fun getChats(): List<SavedChat> {
-        val json = App.prefs().getString("chats", "[]") ?: "[]"
+        val json = p.getString("chats", "[]") ?: "[]"
         return try {
             val arr = JSONArray(json)
             (0 until arr.length()).map { i ->
                 val o = arr.getJSONObject(i)
-                SavedChat(o.getLong("id"), o.getString("title"), o.getString("type"), o.optLong("time", System.currentTimeMillis()))
+                SavedChat(
+                    o.getLong("id"),
+                    o.getString("title"),
+                    o.getString("type"),
+                    o.optLong("time", System.currentTimeMillis())
+                )
             }.sortedByDescending { it.time }
         } catch (e: Exception) { emptyList() }
     }
@@ -58,6 +75,94 @@ object Prefs {
                 put("time", c.time)
             })
         }
-        App.prefs().edit().putString("chats", arr.toString()).apply()
+        p.edit().putString("chats", arr.toString()).apply()
+    }
+    
+    // Drafts
+    fun getDrafts(): List<MessageDraft> {
+        val json = p.getString("drafts", "[]") ?: "[]"
+        return try {
+            val arr = JSONArray(json)
+            (0 until arr.length()).map { i ->
+                val o = arr.getJSONObject(i)
+                MessageDraft(
+                    o.getString("id"),
+                    o.getString("chatId"),
+                    o.getString("text"),
+                    parseButtons(o.optJSONArray("buttons"))
+                )
+            }
+        } catch (e: Exception) { emptyList() }
+    }
+    
+    fun addDraft(draft: MessageDraft) {
+        val drafts = getDrafts().toMutableList()
+        drafts.add(0, draft)
+        val arr = JSONArray()
+        drafts.take(10).forEach { d ->
+            arr.put(JSONObject().apply {
+                put("id", d.id)
+                put("chatId", d.chatId)
+                put("text", d.text)
+                put("buttons", encodeButtons(d.buttons))
+            })
+        }
+        p.edit().putString("drafts", arr.toString()).apply()
+    }
+    
+    fun removeDraft(id: String) {
+        val drafts = getDrafts().filter { it.id != id }
+        val arr = JSONArray()
+        drafts.forEach { d ->
+            arr.put(JSONObject().apply {
+                put("id", d.id)
+                put("chatId", d.chatId)
+                put("text", d.text)
+                put("buttons", encodeButtons(d.buttons))
+            })
+        }
+        p.edit().putString("drafts", arr.toString()).apply()
+    }
+    
+    private fun parseButtons(arr: JSONArray?): List<List<InlineBtn>> {
+        if (arr == null) return emptyList()
+        return (0 until arr.length()).map { i ->
+            val row = arr.getJSONArray(i)
+            (0 until row.length()).map { j ->
+                val b = row.getJSONObject(j)
+                InlineBtn(
+                    b.getString("text"),
+                    b.optString("url").ifEmpty { null },
+                    b.optString("callback").ifEmpty { null },
+                    b.optInt("style", 0)
+                )
+            }
+        }
+    }
+    
+    private fun encodeButtons(buttons: List<List<InlineBtn>>): JSONArray {
+        val arr = JSONArray()
+        buttons.forEach { row ->
+            val rowArr = JSONArray()
+            row.forEach { b ->
+                rowArr.put(JSONObject().apply {
+                    put("text", b.text)
+                    b.url?.let { put("url", it) }
+                    b.callback?.let { put("callback", it) }
+                    put("style", b.style)
+                })
+            }
+            arr.put(rowArr)
+        }
+        return arr
     }
 }
+
+// Models
+data class Bot(val id: Long, val name: String, val username: String?)
+data class Chat(val id: Long, val title: String?, val username: String?, val type: String)
+data class SavedChat(val id: Long, val title: String, val type: String, val time: Long)
+data class InlineBtn(val text: String, val url: String?, val callback: String?, val style: Int = 0)
+data class MessageDraft(val id: String, val chatId: String, val text: String, val buttons: List<List<InlineBtn>>)
+
+enum class MediaType { TEXT, PHOTO, VIDEO, DOCUMENT }

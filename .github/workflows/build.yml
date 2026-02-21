@@ -1,39 +1,85 @@
-name: Build APK
+name: Build & Release APK
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
-    
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace
-    
-    - name: List build outputs
-      run: find app/build -name "*.apk" -type f
-    
-    - name: Upload Debug APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: senseigram-debug
-        path: app/build/outputs/apk/debug/*.apk
-        if-no-files-found: warn
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Get version info
+        id: version
+        run: |
+          VERSION_NAME=$(grep 'versionName' app/build.gradle.kts | head -1 | sed 's/.*"\(.*\)".*/\1/')
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION_NAME-build.${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      - name: Rename APKs
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk SenseiGram-debug.apk
+          cp app/build/outputs/apk/release/app-release-unsigned.apk SenseiGram-release.apk
+
+      - name: Upload Debug APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SenseiGram-debug
+          path: SenseiGram-debug.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "SenseiGram ${{ steps.version.outputs.tag }}"
+          body: |
+            ## SenseiGram - Telegram Bot Manager
+            
+            Manage your Telegram bots, send messages & files to channels, groups, or private chats.
+            
+            ### Features
+            - Connect with bot token via @BotFather
+            - Send text, photo, video, document messages
+            - Colored inline buttons (Default, Primary, Success, Danger, Warning)
+            - Save favorite chats for quick access
+            - Draft messages for later
+            - File upload or URL-based media
+            - Silent mode, protect content, spoiler options
+            - Edit sent messages (text, caption, buttons)
+            - Material 3 design with dark mode support
+            
+            ### Download
+            Install **SenseiGram-debug.apk** directly on your Android device.
+          files: |
+            SenseiGram-debug.apk
+            SenseiGram-release.apk
+          draft: false
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

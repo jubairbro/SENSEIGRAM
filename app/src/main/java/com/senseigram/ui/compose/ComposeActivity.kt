@@ -4,189 +4,215 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.senseigram.R
-import com.senseigram.data.InlineBtn
-import com.senseigram.data.Prefs
-import com.senseigram.data.TelegramApi
+import com.senseigram.data.*
+import com.senseigram.databinding.ActivityComposeBinding
+import com.senseigram.ui.adapters.ButtonsAdapter
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
+import java.util.UUID
 
 class ComposeActivity : AppCompatActivity() {
-    private var mediaUri: Uri? = null
-    private var mediaType = 0
-    private val buttons = mutableListOf<MutableList<InlineBtn>>()
-    private lateinit var buttonsContainer: LinearLayout
+    private lateinit var binding: ActivityComposeBinding
+    private lateinit var prefs: Prefs
+    private lateinit var buttonsAdapter: ButtonsAdapter
+    private var selectedFileUri: Uri? = null
+    private var mediaType: MediaType = MediaType.TEXT
+    private var actualChatId: String = ""
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_compose)
+        binding = ActivityComposeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = intent.getStringExtra("title") ?: "Compose"
+        prefs = Prefs(this)
         
-        val etChatId = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etChatId)
-        val etMessage = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etMessage)
-        val btnSend = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSend)
-        val progress = findViewById<android.widget.ProgressBar>(R.id.progress)
-        val rgMedia = findViewById<android.widget.RadioGroup>(R.id.rgMedia)
-        val btnAttach = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAttach)
-        val tvAttachment = findViewById<android.widget.TextView>(R.id.tvAttachment)
-        val btnAddButton = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddButton)
-        buttonsContainer = findViewById(R.id.buttonsContainer)
+        actualChatId = intent.getStringExtra("chatId") ?: ""
+        val chatName = intent.getStringExtra("chatName")
         
-        intent.getStringExtra("chatId")?.let { etChatId.setText(it) }
-        
-        rgMedia.setOnCheckedChangeListener { _, id ->
-            mediaType = when (id) {
-                R.id.rbPhoto -> 1
-                R.id.rbVideo -> 2
-                R.id.rbDoc -> 3
-                else -> 0
-            }
-            btnAttach.visibility = if (mediaType > 0) View.VISIBLE else View.GONE
-            mediaUri = null
-            tvAttachment.visibility = View.GONE
+        // Show friendly name but keep real chat ID stored separately
+        if (actualChatId.isNotEmpty() && chatName != null) {
+            binding.chatIdInput.setText("$chatName ($actualChatId)")
+        } else {
+            binding.chatIdInput.setText(actualChatId)
         }
         
-        btnAttach.setOnClickListener {
-            startActivityForResult(Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = when (mediaType) { 1 -> "image/*"; 2 -> "video/*"; else -> "*/*" }
-            }, 100)
+        setupViews()
+    }
+    
+    private fun setupViews() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
+        
+        buttonsAdapter = ButtonsAdapter()
+        binding.buttonsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.buttonsRecycler.adapter = buttonsAdapter
+        
+        // When user manually types in chat ID field, clear the stored actualChatId
+        // so we use the typed value instead
+        binding.chatIdInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && actualChatId.isNotEmpty()) {
+                binding.chatIdInput.setText(actualChatId)
+                binding.chatIdInput.setSelection(actualChatId.length)
+            }
         }
         
-        btnAddButton.setOnClickListener { showAddButtonDialog() }
-        
-        btnSend.setOnClickListener {
-            val chatId = etChatId.text.toString().trim()
-            val text = etMessage.text.toString().trim()
-            
-            if (chatId.isEmpty()) {
-                Toast.makeText(this, "Enter Chat ID", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+        binding.messageTypeGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            mediaType = when (checkedIds.firstOrNull()) {
+                R.id.chipPhoto -> MediaType.PHOTO
+                R.id.chipVideo -> MediaType.VIDEO
+                R.id.chipDocument -> MediaType.DOCUMENT
+                else -> MediaType.TEXT
             }
-            
-            btnSend.isEnabled = false
-            progress.visibility = View.VISIBLE
-            
-            lifecycleScope.launch {
-                val token = Prefs.token
-                val btns = if (buttons.isNotEmpty()) buttons.toList() else null
-                val success = when {
-                    mediaType == 1 && mediaUri != null -> getFileFromUri(mediaUri!!)?.let { TelegramApi.sendPhoto(token, chatId, it, text.ifEmpty { null }, btns) } ?: false
-                    mediaType == 2 && mediaUri != null -> getFileFromUri(mediaUri!!)?.let { TelegramApi.sendVideo(token, chatId, it, text.ifEmpty { null }, btns) } ?: false
-                    mediaType == 3 && mediaUri != null -> getFileFromUri(mediaUri!!)?.let { TelegramApi.sendDocument(token, chatId, it, text.ifEmpty { null }, btns) } ?: false
-                    else -> TelegramApi.sendMessage(token, chatId, text, btns)
+            binding.mediaSection.visibility = if (mediaType == MediaType.TEXT) View.GONE else View.VISIBLE
+        }
+        
+        binding.selectFileButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = when (mediaType) {
+                    MediaType.PHOTO -> "image/*"
+                    MediaType.VIDEO -> "video/*"
+                    else -> "*/*"
                 }
+            }
+            startActivityForResult(Intent.createChooser(intent, "Select File"), 100)
+        }
+        
+        binding.addButton.setOnClickListener {
+            buttonsAdapter.addButton()
+        }
+        
+        binding.saveDraftButton.setOnClickListener {
+            saveDraft()
+        }
+        
+        binding.sendButton.setOnClickListener {
+            sendMessage()
+        }
+    }
+    
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            selectedFileUri = data?.data
+            binding.selectedFileName.text = selectedFileUri?.lastPathSegment
+            binding.selectedFileName.visibility = View.VISIBLE
+        }
+    }
+    
+    private fun resolveChatId(): String {
+        // Use stored actualChatId if available, otherwise read from input
+        return if (actualChatId.isNotEmpty()) {
+            actualChatId
+        } else {
+            binding.chatIdInput.text.toString().trim()
+        }
+    }
+    
+    private fun sendMessage() {
+        val chatId = resolveChatId()
+        val text = binding.messageInput.text.toString().trim()
+        val mediaUrl = binding.mediaUrlInput.text.toString().trim()
+        val buttons = buttonsAdapter.getButtons()
+        
+        if (chatId.isEmpty()) {
+            Toast.makeText(this, "Please enter chat ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        if (text.isEmpty() && mediaType == MediaType.TEXT) {
+            Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        val silent = binding.silentSwitch.isChecked
+        val protect = binding.protectSwitch.isChecked
+        val spoiler = binding.spoilerSwitch.isChecked
+        
+        binding.progressBar.visibility = View.VISIBLE
+        binding.sendButton.isEnabled = false
+        
+        lifecycleScope.launch {
+            try {
+                val success = when (mediaType) {
+                    MediaType.TEXT -> TelegramApi.sendMessage(prefs.token, chatId, text, buttons, silent, protect, false)
+                    MediaType.PHOTO -> {
+                        if (selectedFileUri != null) {
+                            val file = getFileFromUri(selectedFileUri!!)
+                            if (file != null) {
+                                TelegramApi.sendPhoto(prefs.token, chatId, file, text.ifEmpty { null }, buttons, silent, protect, spoiler)
+                            } else false
+                        } else if (mediaUrl.isNotEmpty()) {
+                            TelegramApi.sendPhotoByUrl(prefs.token, chatId, mediaUrl, text.ifEmpty { null }, buttons, silent, protect, spoiler)
+                        } else false
+                    }
+                    MediaType.VIDEO -> {
+                        if (selectedFileUri != null) {
+                            val file = getFileFromUri(selectedFileUri!!)
+                            if (file != null) {
+                                TelegramApi.sendVideo(prefs.token, chatId, file, text.ifEmpty { null }, buttons, silent, protect, spoiler)
+                            } else false
+                        } else if (mediaUrl.isNotEmpty()) {
+                            TelegramApi.sendVideoByUrl(prefs.token, chatId, mediaUrl, text.ifEmpty { null }, buttons, silent, protect, spoiler)
+                        } else false
+                    }
+                    MediaType.DOCUMENT -> {
+                        if (selectedFileUri != null) {
+                            val file = getFileFromUri(selectedFileUri!!)
+                            if (file != null) {
+                                TelegramApi.sendDocument(prefs.token, chatId, file, text.ifEmpty { null }, buttons, silent, protect)
+                            } else false
+                        } else if (mediaUrl.isNotEmpty()) {
+                            TelegramApi.sendDocumentByUrl(prefs.token, chatId, mediaUrl, text.ifEmpty { null }, buttons, silent, protect)
+                        } else false
+                    }
+                }
+                
+                binding.progressBar.visibility = View.GONE
+                binding.sendButton.isEnabled = true
                 
                 if (success) {
-                    Toast.makeText(this@ComposeActivity, "Sent!", Toast.LENGTH_SHORT).show()
-                    etMessage.text?.clear()
-                    mediaUri = null
-                    tvAttachment.visibility = View.GONE
+                    Toast.makeText(this@ComposeActivity, R.string.message_sent, Toast.LENGTH_SHORT).show()
+                    finish()
                 } else {
-                    Toast.makeText(this@ComposeActivity, "Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ComposeActivity, R.string.error_send, Toast.LENGTH_LONG).show()
                 }
-                btnSend.isEnabled = true
-                progress.visibility = View.GONE
+            } catch (e: Exception) {
+                binding.progressBar.visibility = View.GONE
+                binding.sendButton.isEnabled = true
+                Toast.makeText(this@ComposeActivity, R.string.error_send, Toast.LENGTH_LONG).show()
             }
         }
     }
     
-    private fun showAddButtonDialog() {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_add_button, null)
-        val etText = view.findViewById<EditText>(R.id.btnText)
-        val etUrl = view.findViewById<EditText>(R.id.btnUrl)
-        val etCallback = view.findViewById<EditText>(R.id.btnCallback)
-        val rgStyle = view.findViewById<RadioGroup>(R.id.rgStyle)
+    private fun saveDraft() {
+        val chatId = resolveChatId()
+        val text = binding.messageInput.text.toString().trim()
+        val buttons = buttonsAdapter.getButtons()
         
-        AlertDialog.Builder(this)
-            .setTitle("Add Inline Button")
-            .setView(view)
-            .setPositiveButton("Add") { _, _ ->
-                val text = etText.text.toString().trim()
-                val url = etUrl.text.toString().trim().ifEmpty { null }
-                val callback = etCallback.text.toString().trim().ifEmpty { null }
-                val style = when (rgStyle.checkedRadioButtonId) {
-                    R.id.stylePrimary -> "primary"
-                    R.id.styleSuccess -> "success"
-                    R.id.styleDanger -> "danger"
-                    else -> "default"
-                }
-                
-                if (text.isNotEmpty()) {
-                    val btn = InlineBtn(text, url, callback, style)
-                    if (buttons.isEmpty()) buttons.add(mutableListOf())
-                    buttons.last().add(btn)
-                    renderButtons()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        val draft = MessageDraft(
+            id = UUID.randomUUID().toString(),
+            chatId = chatId,
+            text = text,
+            buttons = buttons
+        )
+        prefs.addDraft(draft)
+        Toast.makeText(this, R.string.draft_saved, Toast.LENGTH_SHORT).show()
     }
     
-    private fun renderButtons() {
-        buttonsContainer.removeAllViews()
-        buttons.forEachIndexed { rowIndex, row ->
-            val rowLayout = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(0, 8, 0, 0)
+    private fun getFileFromUri(uri: Uri): java.io.File? {
+        return try {
+            contentResolver.openInputStream(uri)?.use { input ->
+                java.io.File(cacheDir, "upload_${System.currentTimeMillis()}").also { file ->
+                    file.outputStream().use { output -> input.copyTo(output) }
                 }
             }
-            row.forEachIndexed { btnIndex, btn ->
-                val button = Button(this).apply {
-                    text = btn.text
-                    when (btn.style) {
-                        "primary" -> setBackgroundColor(ContextCompat.getColor(context, R.color.btn_primary))
-                        "success" -> setBackgroundColor(ContextCompat.getColor(context, R.color.btn_success))
-                        "danger" -> setBackgroundColor(ContextCompat.getColor(context, R.color.btn_danger))
-                    }
-                    setTextColor(resources.getColor(R.color.white, null))
-                    setOnLongClickListener {
-                        AlertDialog.Builder(this@ComposeActivity)
-                            .setTitle("Remove Button?")
-                            .setPositiveButton("Yes") { _, _ ->
-                                buttons[rowIndex].removeAt(btnIndex)
-                                if (buttons[rowIndex].isEmpty()) buttons.removeAt(rowIndex)
-                                renderButtons()
-                            }
-                            .setNegativeButton("No", null)
-                            .show()
-                        true
-                    }
-                }
-                rowLayout.addView(button)
-            }
-            buttonsContainer.addView(rowLayout)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Failed to read file", Toast.LENGTH_SHORT).show()
+            null
         }
     }
-    
-    override fun onActivityResult(reqCode: Int, resCode: Int, data: Intent?) {
-        super.onActivityResult(reqCode, resCode, data)
-        if (reqCode == 100 && resCode == Activity.RESULT_OK) {
-            mediaUri = data?.data
-            findViewById<TextView>(R.id.tvAttachment).apply {
-                text = "File attached"
-                visibility = View.VISIBLE
-            }
-        }
-    }
-    
-    private fun getFileFromUri(uri: Uri): File? = try {
-        contentResolver.openInputStream(uri)?.use { input ->
-            File(cacheDir, "upload_${System.currentTimeMillis()}").apply {
-                FileOutputStream(this).use { output -> input.copyTo(output) }
-            }
-        }
-    } catch (e: Exception) { null }
-    
-    override fun onSupportNavigateUp(): Boolean { finish(); return true }
 }

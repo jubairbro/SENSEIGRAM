@@ -1,135 +1,178 @@
 package com.senseigram.ui.main
 
+import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.EditText
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.senseigram.App
 import com.senseigram.R
 import com.senseigram.data.Prefs
 import com.senseigram.data.SavedChat
 import com.senseigram.data.TelegramApi
+import com.senseigram.databinding.ActivityMainBinding
+import com.senseigram.databinding.DialogSaveChatBinding
+import com.senseigram.ui.adapters.ChatsAdapter
+import com.senseigram.ui.adapters.DraftsAdapter
 import com.senseigram.ui.compose.ComposeActivity
+import com.senseigram.ui.login.LoginActivity
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var adapter: ChatsAdapter
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var prefs: Prefs
+    private lateinit var chatsAdapter: ChatsAdapter
+    private lateinit var draftsAdapter: DraftsAdapter
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        supportActionBar?.title = if (Prefs.botUsername.isNotEmpty()) "@${Prefs.botUsername}" else "SenseiGram"
+        prefs = Prefs(this)
         
-        adapter = ChatsAdapter(
-            onClick = { openCompose(it.id.toString(), it.title) },
-            onDelete = { Prefs.removeChat(it.id); loadChats() }
+        if (prefs.token.isEmpty()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        
+        setupViews()
+        loadData()
+    }
+    
+    private fun setupViews() {
+        binding.welcomeCard.visibility = View.VISIBLE
+        binding.welcomeText.text = "${getString(R.string.welcome)}, ${prefs.botName}!"
+        binding.botNameText.text = if (prefs.botUsername.isNotEmpty()) "@${prefs.botUsername}" else ""
+        
+        chatsAdapter = ChatsAdapter(
+            onItemClick = { chat -> openCompose(chat.id.toString(), chat.title) },
+            onEditClick = { chat -> showChatDialog(chat) },
+            onDeleteClick = { chat -> confirmDeleteChat(chat) }
         )
+        binding.savedChatsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.savedChatsRecycler.adapter = chatsAdapter
         
-        findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvChats).apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
-        }
+        draftsAdapter = DraftsAdapter(
+            onItemClick = { draft -> openCompose(draft.chatId, null) },
+            onDeleteClick = { draft -> prefs.removeDraft(draft.id); loadData() }
+        )
+        binding.draftsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.draftsRecycler.adapter = draftsAdapter
         
-        findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fabAdd).setOnClickListener {
-            showAddDialog()
-        }
+        binding.addChatButton.setOnClickListener { showChatDialog(null) }
+        binding.composeFab.setOnClickListener { openCompose("", null) }
         
-        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCompose).setOnClickListener {
-            openCompose(null, null)
-        }
-        
-        loadChats()
-        showSubscription()
+        binding.settingsButton.setOnClickListener { showSettingsMenu() }
     }
     
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
+    private fun loadData() {
+        val chats = prefs.getChats()
+        chatsAdapter.submitList(chats)
+        
+        if (chats.isEmpty()) {
+            binding.noChatsText.visibility = View.VISIBLE
+            binding.noChatsDescText.visibility = View.VISIBLE
+        } else {
+            binding.noChatsText.visibility = View.GONE
+            binding.noChatsDescText.visibility = View.GONE
+        }
+        
+        val drafts = prefs.getDrafts()
+        draftsAdapter.submitList(drafts)
+        binding.noDraftsText.visibility = if (drafts.isEmpty()) View.VISIBLE else View.GONE
     }
     
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_logout -> {
-                Prefs.token = ""
-                Prefs.botName = ""
-                Prefs.botUsername = ""
-                recreate()
-                true
+    private fun openCompose(chatId: String, chatName: String?) {
+        val intent = Intent(this, ComposeActivity::class.java)
+        intent.putExtra("chatId", chatId)
+        chatName?.let { intent.putExtra("chatName", it) }
+        startActivity(intent)
+    }
+    
+    private fun showChatDialog(existing: SavedChat?) {
+        val dialogBinding = DialogSaveChatBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogBinding.root)
+            .create()
+        
+        existing?.let {
+            dialogBinding.nameInput.setText(it.title)
+            dialogBinding.chatIdInput.setText(it.id.toString())
+        }
+        
+        dialogBinding.cancelButton.setOnClickListener { dialog.dismiss() }
+        dialogBinding.saveButton.setOnClickListener {
+            val name = dialogBinding.nameInput.text.toString().trim()
+            val chatId = dialogBinding.chatIdInput.text.toString().trim()
+            
+            if (name.isEmpty() || chatId.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            R.id.action_channel -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+5ygHfkZxVBc0Mjdl")))
-                true
+            
+            lifecycleScope.launch {
+                val chat = TelegramApi.getChat(prefs.token, chatId)
+                if (chat != null) {
+                    val savedChat = SavedChat(
+                        id = chat.id,
+                        title = name,
+                        type = chat.type,
+                        time = System.currentTimeMillis()
+                    )
+                    prefs.addChat(savedChat)
+                    loadData()
+                    dialog.dismiss()
+                    Toast.makeText(this@MainActivity, "Chat saved!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "Invalid chat ID", Toast.LENGTH_SHORT).show()
+                }
             }
-            else -> super.onOptionsItemSelected(item)
         }
+        
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
     
-    private fun loadChats() {
-        val chats = Prefs.getChats()
-        adapter.submitList(chats)
-        findViewById<android.widget.TextView>(R.id.tvEmpty).visibility = if (chats.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
-    }
-    
-    private fun showAddDialog() {
-        val input = EditText(this).apply { hint = "@username or Chat ID" }
+    private fun confirmDeleteChat(chat: SavedChat) {
         AlertDialog.Builder(this)
-            .setTitle("Add Chat")
-            .setView(input)
-            .setPositiveButton("Add") { _, _ ->
-                val id = input.text.toString().trim()
-                if (id.isNotEmpty()) addChat(id)
+            .setTitle(R.string.confirm_delete)
+            .setMessage("Delete ${chat.title}?")
+            .setPositiveButton(R.string.delete) { _, _ ->
+                prefs.removeChat(chat.id)
+                loadData()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
     
-    private fun addChat(chatId: String) {
-        lifecycleScope.launch {
-            var id = chatId
-            if (!id.startsWith("@") && !id.startsWith("-") && id.toLongOrNull() == null) id = "@$id"
-            val chat = TelegramApi.getChat(Prefs.token, id)
-            if (chat != null) {
-                Prefs.addChat(SavedChat(chat.id, chat.title ?: chat.username ?: "Unknown", chat.type))
-                loadChats()
-                Toast.makeText(this@MainActivity, "Added!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@MainActivity, "Not found", Toast.LENGTH_SHORT).show()
+    private fun showSettingsMenu() {
+        val items = arrayOf(
+            getString(R.string.disconnect)
+        )
+        AlertDialog.Builder(this)
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> disconnectBot()
+                }
             }
-        }
+            .show()
     }
     
-    private fun openCompose(chatId: String?, title: String?) {
-        startActivity(Intent(this, ComposeActivity::class.java).apply {
-            chatId?.let { putExtra("chatId", it) }
-            title?.let { putExtra("title", it) }
-        })
+    private fun disconnectBot() {
+        prefs.token = ""
+        prefs.botName = ""
+        prefs.botUsername = ""
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
     
-    private fun showSubscription() {
-        if (!Prefs.seenSub) {
-            val view = layoutInflater.inflate(R.layout.dialog_subscription, null)
-            val cb = view.findViewById<android.widget.CheckBox>(R.id.cbDontShow)
-            AlertDialog.Builder(this).setView(view).setCancelable(false).create().apply {
-                view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSubscribe).setOnClickListener {
-                    Prefs.seenSub = cb.isChecked
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+5ygHfkZxVBc0Mjdl")))
-                    dismiss()
-                }
-                view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnLater).setOnClickListener {
-                    Prefs.seenSub = cb.isChecked
-                    dismiss()
-                }
-                show()
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 }
