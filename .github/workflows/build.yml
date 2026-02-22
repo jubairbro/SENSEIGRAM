@@ -62,19 +62,19 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: "SenseiGram ${{ steps.version.outputs.tag }}"
           body: |
-            ## SenseiGram - Telegram Bot Manager
+            ## SenseiGram
             
-            Manage your Telegram bots, send messages & files to channels, groups, or private chats.
+            Telegram Bot Manager for Android
             
             ### Features
-            - Connect with bot token via @BotFather
+            - Connect with bot token
             - Send text, photo, video, document messages
             - Colored inline buttons (5 color styles)
             - Save favorite chats for quick access
             - Draft messages for later
             - File upload or URL-based media
             - Silent mode, protect content, spoiler options
-            - Edit sent messages (text, caption, buttons)
+            - Edit sent messages
             - 4 Theme modes: Light, Dark, AMOLED, System
             - 5 Accent colors
             - Material Design 3
