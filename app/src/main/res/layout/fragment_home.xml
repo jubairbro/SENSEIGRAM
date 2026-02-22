@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_lg">
+
+        <!-- Top Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/spacing_lg">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="@dimen/text_xl"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/serverlessLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_serverless"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_xs"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/botBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_connected"
+                android:paddingHorizontal="@dimen/spacing_sm"
+                android:paddingVertical="@dimen/spacing_xs"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_xs"
+                android:fontFamily="monospace"
+                android:visibility="gone"
+                tools:text="@my_bot"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <!-- Offline Banner -->
+        <LinearLayout
+            android:id="@+id/offlineBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_error_banner"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_md"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="@dimen/icon_md"
+                android:layout_height="@dimen/icon_md"
+                android:src="@drawable/ic_wifi_off"
+                android:contentDescription="@null"
+                app:tint="@color/error_text"
+                xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_md"
+                android:text="@string/you_are_offline"
+                android:textColor="@color/error_text"
+                android:textSize="@dimen/text_md"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Welcome Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/welcomeCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:cardBackgroundColor="@color/primary"
+            app:cardCornerRadius="@dimen/welcome_card_radius"
+            app:cardElevation="@dimen/elevation_lg">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Zap icon background decoration -->
+                <ImageView
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_gravity="end|bottom"
+                    android:alpha="0.1"
+                    android:rotation="12"
+                    android:src="@drawable/ic_zap"
+                    android:contentDescription="@null" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/welcome_card_padding">
+
+                    <!-- Name row -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/welcomeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_hero"
+                            android:textStyle="bold"
+                            tools:text="Hello Sensei." />
+
+                        <ImageView
+                            android:id="@+id/editNameBtn"
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:src="@drawable/ic_edit"
+                            android:contentDescription="@string/edit"
+                            app:tint="@color/white"
+                            android:alpha="0.6" />
+                    </LinearLayout>
+
+                    <!-- Name Edit Input (hidden by default) -->
+                    <EditText
+                        android:id="@+id/nameEditInput"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/enter_your_name"
+                        android:textColorHint="#4DFFFFFF"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_hero"
+                        android:textStyle="bold"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:visibility="gone"
+                        tools:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/subtitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:alpha="0.8"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_md"
+                        tools:text="Ready to manage your empire? You have 3 active channels." />
+
+                    <!-- Action buttons -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xl"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/newPostBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:text="@string/new_post"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_md"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            app:backgroundTint="@color/white"
+                            app:cornerRadius="@dimen/corner_md"
+                            app:elevation="@dimen/elevation_lg" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/configBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="@dimen/spacing_md"
+                            android:text="@string/config"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_md"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            app:backgroundTint="#33000000"
+                            app:cornerRadius="@dimen/corner_md" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Your Channels Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/spacing_sm">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/your_channels"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/manageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manage"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_sm"
+                android:textStyle="bold"
+                android:textAllCaps="true" />
+        </LinearLayout>
+
+        <!-- Channels Grid -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/channelsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Empty channels placeholder -->
+        <LinearLayout
+            android:id="@+id/emptyChannels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dashed_border"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xxxl"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/icon_lg"
+                android:layout_height="@dimen/icon_lg"
+                android:src="@drawable/ic_add"
+                android:alpha="0.5"
+                android:contentDescription="@null"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:tint="@color/text_tertiary_light" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="@string/add_channel"
+                android:textColor="@color/text_tertiary_light"
+                android:textSize="@dimen/text_md" />
+        </LinearLayout>
+
+        <!-- Recent Drafts Header -->
+        <TextView
+            android:id="@+id/draftsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:paddingHorizontal="@dimen/spacing_sm"
+            android:text="@string/recent_drafts"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Drafts List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/draftsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxl" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

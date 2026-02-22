@@ -21,7 +21,7 @@ object TelegramApi {
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(120, TimeUnit.SECONDS)
         .build()
-    
+
     suspend fun getMe(token: String): Bot? = withContext(Dispatchers.IO) {
         try {
             val res = call(token, "getMe")
@@ -31,19 +31,27 @@ object TelegramApi {
             } else null
         } catch (e: Exception) { null }
     }
-    
+
     suspend fun getChat(token: String, chatId: String): Chat? = withContext(Dispatchers.IO) {
         try {
             val body = FormBody.Builder().add("chat_id", chatId).build()
             val res = call(token, "getChat", body)
             if (res.optBoolean("ok")) {
                 val r = res.getJSONObject("result")
-                Chat(r.getLong("id"), r.optString("title").ifEmpty { null }, r.optString("username").ifEmpty { null }, r.getString("type"))
+                Chat(
+                    r.getLong("id"),
+                    r.optString("title").ifEmpty { null },
+                    r.optString("username").ifEmpty { null },
+                    r.getString("type")
+                )
             } else null
         } catch (e: Exception) { null }
     }
-    
-    suspend fun sendMessage(token: String, chatId: String, text: String, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, disablePreview: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendMessage(
+        token: String, chatId: String, text: String,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, disablePreview: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -54,11 +62,16 @@ object TelegramApi {
                 if (disablePreview) put("disable_web_page_preview", true)
                 if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "sendMessage", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendMessage", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendPhoto(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendPhoto(
+        token: String, chatId: String, file: File, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -70,11 +83,16 @@ object TelegramApi {
                 .apply { if (spoiler) addFormDataPart("has_spoiler", "true") }
                 .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
-            call(token, "sendPhoto", body).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendPhoto", body)
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendPhotoByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendPhotoByUrl(
+        token: String, chatId: String, url: String, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -85,11 +103,16 @@ object TelegramApi {
                 if (spoiler) put("has_spoiler", true)
                 if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "sendPhoto", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendPhoto", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendVideo(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendVideo(
+        token: String, chatId: String, file: File, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -101,11 +124,16 @@ object TelegramApi {
                 .apply { if (spoiler) addFormDataPart("has_spoiler", "true") }
                 .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
-            call(token, "sendVideo", body).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendVideo", body)
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendVideoByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendVideoByUrl(
+        token: String, chatId: String, url: String, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean, spoiler: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -116,11 +144,16 @@ object TelegramApi {
                 if (spoiler) put("has_spoiler", true)
                 if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "sendVideo", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendVideo", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendDocument(token: String, chatId: String, file: File, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendDocument(
+        token: String, chatId: String, file: File, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val body = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -131,11 +164,16 @@ object TelegramApi {
                 .apply { if (protect) addFormDataPart("protect_content", "true") }
                 .apply { if (!buttons.isNullOrEmpty()) addFormDataPart("reply_markup", buildKeyboard(buttons).toString()) }
                 .build()
-            call(token, "sendDocument", body).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendDocument", body)
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun sendDocumentByUrl(token: String, chatId: String, url: String, caption: String?, buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun sendDocumentByUrl(
+        token: String, chatId: String, url: String, caption: String?,
+        buttons: List<List<InlineBtn>>?, silent: Boolean, protect: Boolean
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -145,12 +183,15 @@ object TelegramApi {
                 if (protect) put("protect_content", true)
                 if (!buttons.isNullOrEmpty()) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "sendDocument", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "sendDocument", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    // Edit operations
-    suspend fun editMessageText(token: String, chatId: String, msgId: Long, text: String, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun editMessageText(
+        token: String, chatId: String, msgId: Long, text: String, buttons: List<List<InlineBtn>>?
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -159,11 +200,15 @@ object TelegramApi {
                 put("parse_mode", "HTML")
                 if (buttons != null) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "editMessageText", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "editMessageText", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun editMessageCaption(token: String, chatId: String, msgId: Long, caption: String, buttons: List<List<InlineBtn>>?): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun editMessageCaption(
+        token: String, chatId: String, msgId: Long, caption: String, buttons: List<List<InlineBtn>>?
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
@@ -172,21 +217,27 @@ object TelegramApi {
                 put("parse_mode", "HTML")
                 if (buttons != null) put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "editMessageCaption", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "editMessageCaption", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
-    suspend fun editMessageReplyMarkup(token: String, chatId: String, msgId: Long, buttons: List<List<InlineBtn>>): Boolean = withContext(Dispatchers.IO) {
+
+    suspend fun editMessageReplyMarkup(
+        token: String, chatId: String, msgId: Long, buttons: List<List<InlineBtn>>
+    ): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val json = JSONObject().apply {
                 put("chat_id", chatId)
                 put("message_id", msgId)
                 put("reply_markup", buildKeyboard(buttons))
             }
-            call(token, "editMessageReplyMarkup", json.toString().toRequestBody("application/json".toMediaType())).optBoolean("ok")
-        } catch (e: Exception) { false }
+            val res = call(token, "editMessageReplyMarkup", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true)
+            else Result.failure(Exception(res.optString("description", "Unknown error")))
+        } catch (e: Exception) { Result.failure(e) }
     }
-    
+
     private fun buildKeyboard(buttons: List<List<InlineBtn>>): JSONObject {
         val keyboard = JSONArray()
         buttons.forEach { row ->
@@ -202,11 +253,14 @@ object TelegramApi {
         }
         return JSONObject().put("inline_keyboard", keyboard)
     }
-    
+
     private fun call(token: String, method: String, body: RequestBody? = null): JSONObject {
         val req = Request.Builder()
             .url("https://api.telegram.org/bot$token/$method")
-            .apply { if (body != null) post(body) else post("{}".toRequestBody("application/json".toMediaType())) }
+            .apply {
+                if (body != null) post(body)
+                else post("{}".toRequestBody("application/json".toMediaType()))
+            }
             .build()
         return JSONObject(client.newCall(req).execute().body?.string() ?: "{}")
     }
@@ -220,7 +274,7 @@ object AccentColors {
         Triple("Rose", 0xFFF43F5E.toInt(), 0xFFBE123C.toInt()),
         Triple("Amber", 0xFFF59E0B.toInt(), 0xFFB45309.toInt())
     )
-    
+
     fun get(index: Int) = colors.getOrElse(index) { colors[0] }
     fun getPrimary(index: Int) = get(index).second
     fun getDark(index: Int) = get(index).third

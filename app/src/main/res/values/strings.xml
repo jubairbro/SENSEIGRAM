@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SenseiGram</string>
+    <string name="app_tagline">Bot Command Center</string>
+    <string name="app_serverless">Serverless</string>
 
     <!-- Login -->
     <string name="login_title">SenseiGram</string>
@@ -7,9 +9,28 @@
     <string name="hint_bot_token">Bot API Token</string>
     <string name="token_hint">Get your token from @BotFather on Telegram</string>
     <string name="btn_connect">Connect Bot</string>
+    <string name="validating">Validating…</string>
 
-    <!-- Main -->
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_compose">Compose</string>
+    <string name="nav_menu">Menu</string>
+
+    <!-- Home -->
+    <string name="hello">Hello</string>
+    <string name="sensei">Sensei</string>
     <string name="welcome">Welcome</string>
+    <string name="home_subtitle">Ready to manage your empire? You have %d active channels.</string>
+    <string name="new_post">New Post</string>
+    <string name="config">Config</string>
+    <string name="your_channels">Your Channels</string>
+    <string name="manage">Manage</string>
+    <string name="add_channel">Add Channel</string>
+    <string name="recent_drafts">Recent Drafts</string>
+    <string name="media_only">Media Only</string>
+    <string name="enter_your_name">Enter your name</string>
+
+    <!-- Main / Dashboard -->
     <string name="saved_chats">Saved Chats</string>
     <string name="no_chats">No saved chats yet</string>
     <string name="no_chats_desc">Add a channel, group, or user to get started</string>
@@ -18,27 +39,93 @@
     <string name="no_drafts">No drafts</string>
     <string name="disconnect">Disconnect Bot</string>
 
+    <!-- Menu -->
+    <string name="menu_title">Menu</string>
+    <string name="system_config">System Config</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_amoled">Amoled</string>
+    <string name="theme_system">System</string>
+    <string name="connection">Connection</string>
+    <string name="bot_token_hint">Bot Token…</string>
+    <string name="check_connection">Check Connection</string>
+    <string name="connected_as">Connected: @%s</string>
+    <string name="lookup_info">Lookup Info</string>
+    <string name="lookup_hint">User ID or @username</string>
+    <string name="targets">Targets</string>
+    <string name="channel_or_id">@channel or ID</string>
+    <string name="no_channels">No channels added yet.</string>
+    <string name="chat_already_saved">Chat already saved</string>
+    <string name="channel_added">Channel Added!</string>
+    <string name="remove_channel">Remove this channel?</string>
+    <string name="settings_label">Settings</string>
+    <string name="telegram_label">Telegram</string>
+    <string name="youtube_label">YouTube</string>
+    <string name="about_app">About App</string>
+    <string name="version_info">SenseiGram v1.0\nBy @JubairSensei</string>
+    <string name="not_found">Not Found: %s</string>
+
     <!-- Compose -->
     <string name="compose_message">Compose Message</string>
+    <string name="new_post_mode">New Post</string>
+    <string name="edit_post_mode">Edit Post</string>
     <string name="select_chat">Target Chat</string>
+    <string name="select_channel">Select Channel</string>
+    <string name="manual_input">Manual Input</string>
     <string name="chat_id">Chat ID or @username</string>
+    <string name="paste_link">Paste Link (t.me/c/123/456)</string>
+    <string name="what_to_update">What to update?</string>
+    <string name="text_caption">Text/Caption</string>
+    <string name="buttons_label">Buttons</string>
+    <string name="edit_hint">Unselected items will keep their existing content on Telegram.</string>
     <string name="message_type">Message Type</string>
     <string name="type_text">Text</string>
     <string name="type_photo">Photo</string>
     <string name="type_video">Video</string>
     <string name="type_document">Document</string>
+    <string name="attach">Attach:</string>
+    <string name="sending_photo">Sending Photo</string>
+    <string name="sending_video">Sending Video</string>
+    <string name="sending_file">Sending File</string>
+    <string name="upload_label">Upload</string>
+    <string name="link_label">Link</string>
+    <string name="choose_file">Choose File…</string>
+    <string name="max_file_size">Max 50MB (Bot API Limit)</string>
     <string name="upload_file">Upload File</string>
     <string name="or_enter_url">Or enter a URL</string>
     <string name="media_url">Media URL (https://…)</string>
+    <string name="media_url_placeholder">https://example.com/file…</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="message_text">Message Text</string>
+    <string name="media_caption">Media Caption</string>
     <string name="enter_message">Message</string>
+    <string name="save_draft_btn">Save Draft</string>
+    <string name="silent">Silent</string>
+    <string name="protect">Protect</string>
+    <string name="hide_preview">Hide Preview</string>
     <string name="inline_buttons">Inline Buttons</string>
+    <string name="button_label">Label</string>
+    <string name="button_url_hint">URL</string>
+    <string name="add_to_row">Add to Row</string>
+    <string name="new_row">New Row</string>
+    <string name="send_now">Send Now</string>
+    <string name="update_selected">Update Selected</string>
     <string name="add_button">+ Add</string>
+    <string name="sending">Sending…</string>
+    <string name="id_chat_extracted">ID &amp; Chat Extracted!</string>
+    <string name="use_format">Use format: t.me/user/123</string>
+    <string name="msg_id_missing">Message ID missing. Paste link first.</string>
+    <string name="nothing_to_update">Nothing selected to update.</string>
+
+    <!-- Settings -->
     <string name="settings">Settings</string>
     <string name="silent_mode">Silent (no notification sound)</string>
     <string name="protect_content">Protect Content (no forward/save)</string>
     <string name="preview_spoiler">Media Spoiler</string>
     <string name="send_message">Send Message</string>
     <string name="save_draft">Save Draft</string>
+    <string name="disable_web_preview">Disable Web Preview</string>
 
     <!-- Buttons -->
     <string name="button_text">Button text</string>
@@ -69,13 +156,30 @@
     <string name="confirm_delete_msg">Delete %s?</string>
     <string name="unknown_chat">Unknown</string>
     <string name="empty_message">(Empty message)</string>
+    <string name="error_bot_token_required">Bot Token Required</string>
+    <string name="error_select_channel">Select Channel First</string>
+    <string name="error_add_file_or_text">Please add a file or text</string>
+    <string name="error_fields_required">Fields required</string>
+    <string name="content_empty">Content empty</string>
+    <string name="saved_to_drafts">Saved to Drafts</string>
 
     <!-- Status -->
-    <string name="message_sent">Message sent successfully!</string>
+    <string name="message_sent">Sent Successfully!</string>
+    <string name="message_updated">Message Updated!</string>
     <string name="draft_saved">Draft saved</string>
     <string name="error_invalid_token">Invalid bot token</string>
     <string name="error_connection">Connection error. Check your internet.</string>
     <string name="error_send">Failed to send message</string>
+
+    <!-- Network -->
+    <string name="back_online">Back Online</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="you_are_offline">You are currently offline.</string>
+
+    <!-- Tutorial -->
+    <string name="welcome_title">Welcome to SenseiGram</string>
+    <string name="welcome_desc">Your professional serverless bot manager.</string>
+    <string name="get_started">Get Started</string>
 
     <!-- Scrolling behavior -->
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>

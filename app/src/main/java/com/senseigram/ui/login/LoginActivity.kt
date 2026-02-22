@@ -16,20 +16,20 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var prefs: Prefs
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         prefs = Prefs(this)
-        
+
         if (prefs.token.isNotEmpty()) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
         }
-        
+
         binding.connectButton.setOnClickListener {
             val token = binding.tokenInput.text.toString().trim()
             if (token.isEmpty()) {
@@ -40,11 +40,11 @@ class LoginActivity : AppCompatActivity() {
             connectBot(token)
         }
     }
-    
+
     private fun connectBot(token: String) {
         binding.progressBar.visibility = View.VISIBLE
         binding.connectButton.isEnabled = false
-        
+
         lifecycleScope.launch {
             try {
                 val bot = TelegramApi.getMe(token)

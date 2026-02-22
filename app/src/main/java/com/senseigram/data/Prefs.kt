@@ -7,40 +7,35 @@ import org.json.JSONObject
 
 class Prefs(private val ctx: Context) {
     private val p: SharedPreferences = ctx.getSharedPreferences("senseigram", Context.MODE_PRIVATE)
-    
+
     var token: String
         get() = p.getString("token", "") ?: ""
         set(v) = p.edit().putString("token", v).apply()
-    
+
     var botName: String
         get() = p.getString("botName", "") ?: ""
         set(v) = p.edit().putString("botName", v).apply()
-    
+
     var botUsername: String
         get() = p.getString("botUser", "") ?: ""
         set(v) = p.edit().putString("botUser", v).apply()
-    
-    var seenSub: Boolean
-        get() = p.getBoolean("seenSub", false)
-        set(v) = p.edit().putBoolean("seenSub", v).apply()
-    
+
     var seenTut: Boolean
         get() = p.getBoolean("seenTut", false)
         set(v) = p.edit().putBoolean("seenTut", v).apply()
-    
-    var theme: Int // 0=light, 1=dark, 2=amoled, 3=system
+
+    var theme: Int
         get() = p.getInt("theme", 3)
         set(v) = p.edit().putInt("theme", v).apply()
-    
-    var accent: Int // 0=emerald, 1=blue, 2=violet, 3=rose, 4=amber
+
+    var accent: Int
         get() = p.getInt("accent", 0)
         set(v) = p.edit().putInt("accent", v).apply()
-    
+
     var userName: String
         get() = p.getString("userName", "") ?: ""
         set(v) = p.edit().putString("userName", v).apply()
-    
-    // Saved Chats
+
     fun getChats(): List<SavedChat> {
         val json = p.getString("chats", "[]") ?: "[]"
         return try {
@@ -54,17 +49,19 @@ class Prefs(private val ctx: Context) {
                     o.optLong("time", System.currentTimeMillis())
                 )
             }.sortedByDescending { it.time }
-        } catch (e: Exception) { emptyList() }
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
-    
+
     fun addChat(chat: SavedChat) {
         val chats = getChats().filter { it.id != chat.id }.toMutableList()
         chats.add(0, chat)
         saveChats(chats)
     }
-    
+
     fun removeChat(id: Long) = saveChats(getChats().filter { it.id != id })
-    
+
     private fun saveChats(chats: List<SavedChat>) {
         val arr = JSONArray()
         chats.forEach { c ->
@@ -77,8 +74,7 @@ class Prefs(private val ctx: Context) {
         }
         p.edit().putString("chats", arr.toString()).apply()
     }
-    
-    // Drafts
+
     fun getDrafts(): List<MessageDraft> {
         val json = p.getString("drafts", "[]") ?: "[]"
         return try {
@@ -89,12 +85,15 @@ class Prefs(private val ctx: Context) {
                     o.getString("id"),
                     o.getString("chatId"),
                     o.getString("text"),
-                    parseButtons(o.optJSONArray("buttons"))
+                    parseButtons(o.optJSONArray("buttons")),
+                    o.optLong("timestamp", System.currentTimeMillis())
                 )
             }
-        } catch (e: Exception) { emptyList() }
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
-    
+
     fun addDraft(draft: MessageDraft) {
         val drafts = getDrafts().toMutableList()
         drafts.add(0, draft)
@@ -105,11 +104,12 @@ class Prefs(private val ctx: Context) {
                 put("chatId", d.chatId)
                 put("text", d.text)
                 put("buttons", encodeButtons(d.buttons))
+                put("timestamp", d.timestamp)
             })
         }
         p.edit().putString("drafts", arr.toString()).apply()
     }
-    
+
     fun removeDraft(id: String) {
         val drafts = getDrafts().filter { it.id != id }
         val arr = JSONArray()
@@ -119,11 +119,12 @@ class Prefs(private val ctx: Context) {
                 put("chatId", d.chatId)
                 put("text", d.text)
                 put("buttons", encodeButtons(d.buttons))
+                put("timestamp", d.timestamp)
             })
         }
         p.edit().putString("drafts", arr.toString()).apply()
     }
-    
+
     private fun parseButtons(arr: JSONArray?): List<List<InlineBtn>> {
         if (arr == null) return emptyList()
         return (0 until arr.length()).map { i ->
@@ -139,7 +140,7 @@ class Prefs(private val ctx: Context) {
             }
         }
     }
-    
+
     private fun encodeButtons(buttons: List<List<InlineBtn>>): JSONArray {
         val arr = JSONArray()
         buttons.forEach { row ->
@@ -158,11 +159,16 @@ class Prefs(private val ctx: Context) {
     }
 }
 
-// Models
 data class Bot(val id: Long, val name: String, val username: String?)
 data class Chat(val id: Long, val title: String?, val username: String?, val type: String)
 data class SavedChat(val id: Long, val title: String, val type: String, val time: Long)
 data class InlineBtn(val text: String, val url: String?, val callback: String?, val style: Int = 0)
-data class MessageDraft(val id: String, val chatId: String, val text: String, val buttons: List<List<InlineBtn>>)
+data class MessageDraft(
+    val id: String,
+    val chatId: String,
+    val text: String,
+    val buttons: List<List<InlineBtn>>,
+    val timestamp: Long = System.currentTimeMillis()
+)
 
 enum class MediaType { TEXT, PHOTO, VIDEO, DOCUMENT }

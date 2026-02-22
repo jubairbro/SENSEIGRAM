@@ -23,7 +23,6 @@
         </activity>
 
         <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.compose.ComposeActivity" />
 
     </application>
 </manifest>

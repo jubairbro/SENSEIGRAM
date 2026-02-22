@@ -1,35 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Spacing -->
     <dimen name="spacing_xs">4dp</dimen>
     <dimen name="spacing_sm">8dp</dimen>
     <dimen name="spacing_md">12dp</dimen>
     <dimen name="spacing_lg">16dp</dimen>
     <dimen name="spacing_xl">24dp</dimen>
-    <dimen name="spacing_2xl">32dp</dimen>
-    
-    <dimen name="corner_sm">4dp</dimen>
-    <dimen name="corner_md">8dp</dimen>
-    <dimen name="corner_lg">12dp</dimen>
-    <dimen name="corner_xl">16dp</dimen>
+    <dimen name="spacing_xxl">32dp</dimen>
+    <dimen name="spacing_xxxl">48dp</dimen>
+
+    <!-- Corner Radius -->
+    <dimen name="corner_sm">8dp</dimen>
+    <dimen name="corner_md">12dp</dimen>
+    <dimen name="corner_lg">16dp</dimen>
+    <dimen name="corner_xl">24dp</dimen>
+    <dimen name="corner_xxl">32dp</dimen>
     <dimen name="corner_full">999dp</dimen>
-    
+
+    <!-- Text Sizes -->
     <dimen name="text_xs">10sp</dimen>
     <dimen name="text_sm">12sp</dimen>
     <dimen name="text_md">14sp</dimen>
     <dimen name="text_lg">16sp</dimen>
     <dimen name="text_xl">20sp</dimen>
-    <dimen name="text_2xl">24sp</dimen>
-    <dimen name="text_3xl">32sp</dimen>
-    
+    <dimen name="text_xxl">24sp</dimen>
+    <dimen name="text_hero">30sp</dimen>
+
+    <!-- Icon Sizes -->
     <dimen name="icon_sm">16dp</dimen>
-    <dimen name="icon_md">24dp</dimen>
-    <dimen name="icon_lg">32dp</dimen>
-    <dimen name="icon_xl">48dp</dimen>
-    
+    <dimen name="icon_md">20dp</dimen>
+    <dimen name="icon_lg">24dp</dimen>
+    <dimen name="icon_xl">32dp</dimen>
+    <dimen name="icon_xxl">40dp</dimen>
+
+    <!-- Component Sizes -->
     <dimen name="button_height">48dp</dimen>
-    <dimen name="input_height">56dp</dimen>
+    <dimen name="button_height_lg">56dp</dimen>
+    <dimen name="input_height">52dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
-    
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="avatar_size">40dp</dimen>
+    <dimen name="color_dot_size">40dp</dimen>
+    <dimen name="bottom_nav_height">64dp</dimen>
+    <dimen name="editor_height">220dp</dimen>
+
+    <!-- Welcome Card -->
+    <dimen name="welcome_card_radius">32dp</dimen>
+    <dimen name="welcome_card_padding">32dp</dimen>
+
+    <!-- Channel Card -->
+    <dimen name="channel_card_padding">16dp</dimen>
+
+    <!-- Elevation -->
     <dimen name="card_elevation">2dp</dimen>
+    <dimen name="elevation_sm">2dp</dimen>
+    <dimen name="elevation_md">4dp</dimen>
+    <dimen name="elevation_lg">8dp</dimen>
+    <dimen name="elevation_xl">16dp</dimen>
+
+    <!-- Dialog -->
     <dimen name="dialog_corner">16dp</dimen>
 </resources>

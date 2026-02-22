@@ -1,14 +1,68 @@
 <resources>
-    <!-- Brand -->
+    <!-- Emerald Accent (Default) -->
+    <color name="emerald">#FF10B981</color>
+    <color name="emerald_dark">#FF059669</color>
+    <color name="emerald_light">#FF6EE7B7</color>
+    <color name="emerald_bg">#1A10B981</color>
+
+    <!-- Blue Accent -->
+    <color name="blue_accent">#FF3B82F6</color>
+    <color name="blue_dark">#FF1D4ED8</color>
+    <color name="blue_bg">#1A3B82F6</color>
+
+    <!-- Violet Accent -->
+    <color name="violet">#FF8B5CF6</color>
+    <color name="violet_dark">#FF6D28D9</color>
+    <color name="violet_bg">#1A8B5CF6</color>
+
+    <!-- Rose Accent -->
+    <color name="rose">#FFF43F5E</color>
+    <color name="rose_dark">#FFBE123C</color>
+    <color name="rose_bg">#1AF43F5E</color>
+
+    <!-- Amber Accent -->
+    <color name="amber">#FFF59E0B</color>
+    <color name="amber_dark">#FFB45309</color>
+    <color name="amber_bg">#1AF59E0B</color>
+
+    <!-- Brand (uses emerald default) -->
     <color name="primary">#FF10B981</color>
     <color name="primary_dark">#FF059669</color>
     <color name="primary_light">#FF6EE7B7</color>
+    <color name="primary_bg">#1A10B981</color>
 
-    <!-- Surfaces -->
-    <color name="background_light">#FFF9FAFB</color>
+    <!-- Light Theme Surfaces -->
+    <color name="background_light">#FFF8FAFC</color>
     <color name="surface_light">#FFFFFFFF</color>
-    <color name="text_primary_light">#FF111827</color>
-    <color name="text_secondary_light">#FF6B7280</color>
+    <color name="surface_variant_light">#FFF1F5F9</color>
+    <color name="card_bg_light">#FFFFFFFF</color>
+    <color name="text_primary_light">#FF0F172A</color>
+    <color name="text_secondary_light">#FF64748B</color>
+    <color name="text_tertiary_light">#FF94A3B8</color>
+    <color name="divider_light">#FFE2E8F0</color>
+    <color name="input_bg_light">#FFF1F5F9</color>
+
+    <!-- Dark Theme Surfaces -->
+    <color name="background_dark">#FF0F172A</color>
+    <color name="surface_dark">#FF1E293B</color>
+    <color name="surface_variant_dark">#FF334155</color>
+    <color name="card_bg_dark">#FF1E293B</color>
+    <color name="text_primary_dark">#FFF1F5F9</color>
+    <color name="text_secondary_dark">#FF94A3B8</color>
+    <color name="text_tertiary_dark">#FF64748B</color>
+    <color name="divider_dark">#14FFFFFF</color>
+    <color name="input_bg_dark">#0AFFFFFF</color>
+
+    <!-- AMOLED Surfaces -->
+    <color name="background_amoled">#FF000000</color>
+    <color name="surface_amoled">#FF0A0A0A</color>
+    <color name="card_bg_amoled">#FF0A0A0A</color>
+
+    <!-- Glass Panel -->
+    <color name="glass_light">#A6FFFFFF</color>
+    <color name="glass_dark">#990F172A</color>
+    <color name="glass_border_light">#80FFFFFF</color>
+    <color name="glass_border_dark">#14FFFFFF</color>
 
     <!-- Button Colors -->
     <color name="btn_default">#FF374151</color>
@@ -17,12 +71,29 @@
     <color name="btn_danger">#FFEF4444</color>
     <color name="btn_warning">#FFF59E0B</color>
 
-    <!-- Legacy (keep for compat) -->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <!-- Status Colors -->
+    <color name="success_bg">#1A22C55E</color>
+    <color name="success_text">#FF22C55E</color>
+    <color name="error_bg">#1AEF4444</color>
+    <color name="error_text">#FFEF4444</color>
+    <color name="info_bg">#1A3B82F6</color>
+    <color name="info_text">#FF3B82F6</color>
+    <color name="warning_bg">#1AF59E0B</color>
+    <color name="warning_text">#FFF59E0B</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottom_nav_light">#E6FFFFFF</color>
+    <color name="bottom_nav_dark">#CC000000</color>
+
+    <!-- Gradient endpoints -->
+    <color name="gradient_dark_end">#FF1E293B</color>
+
+    <!-- Social -->
+    <color name="telegram_blue">#FF0088CC</color>
+    <color name="youtube_red">#FFFF0000</color>
+
+    <!-- Legacy -->
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
 </resources>
