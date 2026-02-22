@@ -2,6 +2,7 @@
     <string name="app_name">SenseiGram</string>
     <string name="app_tagline">Bot Command Center</string>
     <string name="app_serverless">Serverless</string>
+    <string name="connect_your_bot">Connect your bot</string>
 
     <!-- Login -->
     <string name="login_title">SenseiGram</string>
@@ -15,6 +16,9 @@
     <string name="nav_home">Home</string>
     <string name="nav_compose">Compose</string>
     <string name="nav_menu">Menu</string>
+    <string name="settings">Settings</string>
+    <string name="color_accent">Color Accent</string>
+    <string name="bot_connection">Bot</string>
 
     <!-- Home -->
     <string name="hello">Hello</string>

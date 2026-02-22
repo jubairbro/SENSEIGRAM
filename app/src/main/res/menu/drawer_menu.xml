@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home" />
+
+    <item
+        android:id="@+id/nav_compose"
+        android:icon="@drawable/ic_pen"
+        android:title="@string/nav_compose" />
+
+    <item android:title="@string/settings">
+        <menu>
+            <item
+                android:id="@+id/nav_theme"
+                android:icon="@drawable/ic_moon"
+                android:title="@string/appearance" />
+            
+            <item
+                android:id="@+id/nav_accent"
+                android:icon="@drawable/ic_pen"
+                android:title="@string/color_accent" />
+        </menu>
+    </item>
+
+    <item android:title="@string/bot_connection">
+        <menu>
+            <item
+                android:id="@+id/nav_bot"
+                android:icon="@drawable/ic_bot"
+                android:title="@string/connection" />
+            
+            <item
+                android:id="@+id/nav_lookup"
+                android:icon="@drawable/ic_search"
+                android:title="@string/lookup_info" />
+            
+            <item
+                android:id="@+id/nav_channels"
+                android:icon="@drawable/ic_chat"
+                android:title="@string/targets" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/nav_disconnect"
+        android:icon="@drawable/ic_close"
+        android:title="@string/disconnect" />
+
+</menu>
