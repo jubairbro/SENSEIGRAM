@@ -45,6 +45,7 @@ class MenuFragment : Fragment() {
         setupLookup()
         setupTargets()
         setupAccentSelector()
+        setupSettings()
         setupSocialLinks()
         setupJoinSupport()
         setupDisconnect()
@@ -306,6 +307,22 @@ class MenuFragment : Fragment() {
         }
 
         binding.menuTitle.setTextColor(AccentColors.getPrimary(current))
+    }
+
+    // ─── Settings ────────────────────────────────────────────────────
+
+    private fun setupSettings() {
+        // Smooth Scroll
+        binding.smoothScrollSwitch.isChecked = prefs.smoothScroll
+        binding.smoothScrollSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.smoothScroll = isChecked
+        }
+
+        // Haptic Feedback
+        binding.hapticSwitch.isChecked = prefs.hapticFeedback
+        binding.hapticSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.hapticFeedback = isChecked
+        }
     }
 
     // ─── Social Links ───────────────────────────────────────────────

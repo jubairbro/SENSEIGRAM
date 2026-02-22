@@ -16,6 +16,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/bottom_nav_light</item>
         <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation</item>
     </style>
 
     <!-- Dark Theme -->
@@ -34,6 +35,7 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@color/bottom_nav_dark</item>
         <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation</item>
     </style>
 
     <!-- AMOLED Theme -->
@@ -52,6 +54,15 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:windowBackground">@color/background_amoled</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation</item>
+    </style>
+
+    <!-- Window Animations -->
+    <style name="WindowAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
     </style>
 
     <!-- Input Style -->
@@ -84,6 +95,40 @@
     <style name="Widget.SenseiGram.GlassCard" parent="">
         <item name="android:background">@drawable/bg_glass_panel</item>
         <item name="android:padding">@dimen/spacing_lg</item>
+    </style>
+
+    <!-- Settings Card -->
+    <style name="SettingsCard">
+        <item name="android:background">@drawable/bg_glass_panel</item>
+        <item name="android:padding">@dimen/spacing_xl</item>
+        <item name="android:layout_marginTop">@dimen/spacing_lg</item>
+    </style>
+
+    <!-- Settings Title -->
+    <style name="SettingsTitle">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/text_tertiary_light</item>
+        <item name="android:textSize">@dimen/text_sm</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_lg</item>
+    </style>
+
+    <!-- Settings Row -->
+    <style name="SettingsRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingVertical">@dimen/spacing_sm</item>
+    </style>
+
+    <!-- Settings Label -->
+    <style name="SettingsLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/text_md</item>
     </style>
 
 </resources>

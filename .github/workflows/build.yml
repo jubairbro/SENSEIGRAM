@@ -28,11 +28,20 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Decode Keystore
+        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/senseigram.jks
+
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Build Release APK
         run: ./gradlew assembleRelease --stacktrace
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
       - name: Get version info
         id: version
@@ -44,7 +53,11 @@ jobs:
       - name: Rename APKs
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk SenseiGram-debug.apk
-          cp app/build/outputs/apk/release/app-release-unsigned.apk SenseiGram-release.apk
+          if [ -f app/build/outputs/apk/release/app-release.apk ]; then
+            cp app/build/outputs/apk/release/app-release.apk SenseiGram-release.apk
+          else
+            cp app/build/outputs/apk/release/app-release-unsigned.apk SenseiGram-release.apk
+          fi
 
       - name: Upload Debug APK artifact
         uses: actions/upload-artifact@v4
@@ -65,16 +78,23 @@ jobs:
             ### Features
             - Connect with bot token via @BotFather
             - Send text, photo, video, document messages
-            - Colored inline buttons (Default, Primary, Success, Danger, Warning)
+            - Colored inline buttons (5 color styles)
             - Save favorite chats for quick access
             - Draft messages for later
             - File upload or URL-based media
             - Silent mode, protect content, spoiler options
             - Edit sent messages (text, caption, buttons)
-            - Material 3 design with dark mode support
+            - 4 Theme modes: Light, Dark, AMOLED, System
+            - 5 Accent colors: Emerald, Blue, Violet, Rose, Amber
+            - Settings: Smooth scroll, Haptic feedback toggles
+            - Material Design 3
             
             ### Download
-            Install **SenseiGram-debug.apk** directly on your Android device.
+            Install APK directly on your Android device. No need to uninstall previous version.
+            
+            ### Support
+            - Telegram: [@JubairSensei](https://t.me/JubairSensei)
+            - Support: [@SenseiGramSupport](https://t.me/SenseiGramSupport)
           files: |
             SenseiGram-debug.apk
             SenseiGram-release.apk

@@ -11,14 +11,27 @@ android {
         applicationId = "com.senseigram"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("senseigram.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "senseigram"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "senseigram"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "senseigram"
+        }
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     

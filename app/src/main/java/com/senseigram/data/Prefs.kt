@@ -36,6 +36,14 @@ class Prefs(private val ctx: Context) {
         get() = p.getString("userName", "") ?: ""
         set(v) = p.edit().putString("userName", v).apply()
 
+    var smoothScroll: Boolean
+        get() = p.getBoolean("smoothScroll", true)
+        set(v) = p.edit().putBoolean("smoothScroll", v).apply()
+
+    var hapticFeedback: Boolean
+        get() = p.getBoolean("hapticFeedback", true)
+        set(v) = p.edit().putBoolean("hapticFeedback", v).apply()
+
     fun getChats(): List<SavedChat> {
         val json = p.getString("chats", "[]") ?: "[]"
         return try {
