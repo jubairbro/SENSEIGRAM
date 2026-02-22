@@ -32,20 +32,35 @@ object TelegramApi {
         } catch (e: Exception) { null }
     }
 
-    suspend fun getChat(token: String, chatId: String): Chat? = withContext(Dispatchers.IO) {
+    suspend fun getChat(token: String, chatId: String): ChatLookupResult = withContext(Dispatchers.IO) {
         try {
             val body = FormBody.Builder().add("chat_id", chatId).build()
             val res = call(token, "getChat", body)
             if (res.optBoolean("ok")) {
                 val r = res.getJSONObject("result")
-                Chat(
+                val chat = Chat(
                     r.getLong("id"),
                     r.optString("title").ifEmpty { null },
                     r.optString("username").ifEmpty { null },
-                    r.getString("type")
+                    r.getString("type"),
+                    r.optString("first_name").ifEmpty { null },
+                    r.optString("last_name").ifEmpty { null }
                 )
-            } else null
-        } catch (e: Exception) { null }
+                ChatLookupResult(chat, null)
+            } else {
+                val errorDesc = res.optString("description", "Unknown error")
+                val friendlyError = when {
+                    errorDesc.contains("chat not found", ignoreCase = true) -> 
+                        "Bot is not a member of this chat. Add the bot first or use a public @username."
+                    errorDesc.contains("Bad Request", ignoreCase = true) -> 
+                        "Invalid chat ID or username format."
+                    else -> errorDesc
+                }
+                ChatLookupResult(null, friendlyError)
+            }
+        } catch (e: Exception) { 
+            ChatLookupResult(null, "Network error: ${e.message}") 
+        }
     }
 
     suspend fun sendMessage(

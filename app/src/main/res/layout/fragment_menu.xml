@@ -607,6 +607,23 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Join Support -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/joinSupportBtn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:text="@string/join_support"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/telegram_blue"
+            app:cornerRadius="@dimen/corner_lg"
+            app:icon="@drawable/ic_telegram"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/spacing_sm" />
+
         <!-- Disconnect -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/disconnectBtn"

@@ -55,23 +55,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun applyTheme() {
-        when (prefs.theme) {
-            0 -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                setTheme(R.style.Theme_SenseiGram)
-            }
-            1 -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                setTheme(R.style.Theme_SenseiGram_Dark)
-            }
-            2 -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                setTheme(R.style.Theme_SenseiGram_Amoled)
-            }
-            else -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                setTheme(R.style.Theme_SenseiGram)
-            }
+        val themeIndex = prefs.theme
+        
+        // First set night mode
+        when (themeIndex) {
+            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+
+        // Then set theme (AMOLED uses special theme with pure black)
+        when (themeIndex) {
+            2 -> setTheme(R.style.Theme_SenseiGram_Amoled)
+            else -> setTheme(R.style.Theme_SenseiGram)
         }
     }
 

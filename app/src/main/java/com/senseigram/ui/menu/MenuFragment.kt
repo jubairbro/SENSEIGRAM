@@ -46,6 +46,7 @@ class MenuFragment : Fragment() {
         setupTargets()
         setupAccentSelector()
         setupSocialLinks()
+        setupJoinSupport()
         setupDisconnect()
     }
 
@@ -78,16 +79,13 @@ class MenuFragment : Fragment() {
         val currentTheme = prefs.theme
         val accentColor = AccentColors.getPrimary(prefs.accent)
         val defaultColor = resources.getColor(R.color.text_tertiary_light, null)
-        val activeTextColor = resources.getColor(R.color.text_primary_light, null)
         val defaultTextColor = resources.getColor(R.color.text_secondary_light, null)
 
-        // Icons
         binding.themeLightIcon.setColorFilter(if (currentTheme == 0) accentColor else defaultColor)
         binding.themeDarkIcon.setColorFilter(if (currentTheme == 1) accentColor else defaultColor)
         binding.themeAmoledIcon.setColorFilter(if (currentTheme == 2) accentColor else defaultColor)
         binding.themeSystemIcon.setColorFilter(if (currentTheme == 3) accentColor else defaultColor)
 
-        // Labels
         binding.themeLightLabel.setTextColor(if (currentTheme == 0) accentColor else defaultTextColor)
         binding.themeDarkLabel.setTextColor(if (currentTheme == 1) accentColor else defaultTextColor)
         binding.themeAmoledLabel.setTextColor(if (currentTheme == 2) accentColor else defaultTextColor)
@@ -142,10 +140,16 @@ class MenuFragment : Fragment() {
     }
 
     private fun updateConnectionStatus() {
+        val name = prefs.botName
         val username = prefs.botUsername
-        if (username.isNotEmpty()) {
+        if (name.isNotEmpty() || username.isNotEmpty()) {
             binding.connectedStatus.visibility = View.VISIBLE
-            binding.connectedText.text = getString(R.string.connected_as, username)
+            val displayText = if (username.isNotEmpty()) {
+                "${name.ifEmpty { "Bot" }} (@$username)"
+            } else {
+                name.ifEmpty { "Connected" }
+            }
+            binding.connectedText.text = displayText
         } else {
             binding.connectedStatus.visibility = View.GONE
         }
@@ -167,10 +171,22 @@ class MenuFragment : Fragment() {
             binding.lookupBtn.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launch {
-                val chat = TelegramApi.getChat(token, query)
-                if (chat != null) {
+                val result = TelegramApi.getChat(token, query)
+                if (result.chat != null) {
+                    val chat = result.chat
                     binding.lookupResult.visibility = View.VISIBLE
-                    binding.lookupTitle.text = chat.title ?: chat.username ?: getString(R.string.unknown_chat)
+
+                    // Build display name: title > firstName lastName > username
+                    val displayName = when {
+                        !chat.title.isNullOrEmpty() -> chat.title
+                        !chat.firstName.isNullOrEmpty() -> {
+                            val fullName = chat.firstName + (chat.lastName?.let { " $it" } ?: "")
+                            fullName
+                        }
+                        !chat.username.isNullOrEmpty() -> chat.username
+                        else -> getString(R.string.unknown_chat)
+                    }
+                    binding.lookupTitle.text = displayName
                     binding.lookupType.text = chat.type
                     binding.lookupId.text = "ID: ${chat.id}"
 
@@ -182,7 +198,8 @@ class MenuFragment : Fragment() {
                     }
                 } else {
                     binding.lookupResult.visibility = View.GONE
-                    Toast.makeText(requireContext(), getString(R.string.not_found, query), Toast.LENGTH_SHORT).show()
+                    val errorMsg = result.error ?: getString(R.string.not_found, query)
+                    Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
                 }
                 binding.lookupBtn.isEnabled = true
             }
@@ -209,7 +226,6 @@ class MenuFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Check if already saved
             val existingChats = prefs.getChats()
             if (existingChats.any { it.id.toString() == input || it.title == input }) {
                 Toast.makeText(requireContext(), R.string.chat_already_saved, Toast.LENGTH_SHORT).show()
@@ -219,11 +235,12 @@ class MenuFragment : Fragment() {
             binding.addChannelBtn.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launch {
-                val chat = TelegramApi.getChat(token, input)
-                if (chat != null) {
+                val result = TelegramApi.getChat(token, input)
+                if (result.chat != null) {
+                    val chat = result.chat
                     val savedChat = SavedChat(
                         id = chat.id,
-                        title = chat.title ?: chat.username ?: input,
+                        title = chat.title ?: chat.firstName ?: chat.username ?: input,
                         type = chat.type,
                         time = System.currentTimeMillis()
                     )
@@ -232,7 +249,8 @@ class MenuFragment : Fragment() {
                     binding.newChannelInput.text?.clear()
                     Toast.makeText(requireContext(), R.string.channel_added, Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.not_found, input), Toast.LENGTH_SHORT).show()
+                    val errorMsg = result.error ?: getString(R.string.not_found, input)
+                    Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
                 }
                 binding.addChannelBtn.isEnabled = true
             }
@@ -268,8 +286,8 @@ class MenuFragment : Fragment() {
     private fun setAccent(index: Int) {
         prefs.accent = index
         updateAccentHighlight()
-        // Update menu title color dynamically
-        binding.menuTitle.setTextColor(AccentColors.getPrimary(index))
+        // Recreate activity to apply accent globally
+        requireActivity().recreate()
     }
 
     private fun updateAccentHighlight() {
@@ -287,7 +305,6 @@ class MenuFragment : Fragment() {
             dot.scaleY = if (i == current) 1.2f else 1.0f
         }
 
-        // Update menu title
         binding.menuTitle.setTextColor(AccentColors.getPrimary(current))
     }
 
@@ -300,6 +317,12 @@ class MenuFragment : Fragment() {
 
         binding.youtubeLink.setOnClickListener {
             openUrl("https://youtube.com/@JubairSensei")
+        }
+    }
+
+    private fun setupJoinSupport() {
+        binding.joinSupportBtn.setOnClickListener {
+            openUrl("https://t.me/SenseiGramSupport")
         }
     }
 

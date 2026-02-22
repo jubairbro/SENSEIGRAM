@@ -60,6 +60,7 @@
     <string name="channel_added">Channel Added!</string>
     <string name="remove_channel">Remove this channel?</string>
     <string name="settings_label">Settings</string>
+    <string name="join_support">Join Support</string>
     <string name="telegram_label">Telegram</string>
     <string name="youtube_label">YouTube</string>
     <string name="about_app">About App</string>

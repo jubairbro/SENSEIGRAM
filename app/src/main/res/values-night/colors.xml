@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Theme Colors (auto-applied when night mode is on) -->
+    <color name="background_light">#FF0F172A</color>
+    <color name="surface_light">#FF1E293B</color>
+    <color name="surface_variant_light">#FF334155</color>
+    <color name="card_bg_light">#FF1E293B</color>
+    <color name="text_primary_light">#FFF1F5F9</color>
+    <color name="text_secondary_light">#FF94A3B8</color>
+    <color name="text_tertiary_light">#FF64748B</color>
+    <color name="divider_light">#14FFFFFF</color>
+    <color name="input_bg_light">#0AFFFFFF</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottom_nav_light">#CC000000</color>
+
+    <!-- Glass Panel -->
+    <color name="glass_light">#990F172A</color>
+    <color name="glass_border_light">#14FFFFFF</color>
+</resources>
