@@ -102,11 +102,6 @@ class MainActivity : AppCompatActivity() {
             showFragment(ComposeFragment())
             updateBottomNavSelection(1)
         }
-        
-        binding.fabCompose.setOnClickListener {
-            showFragment(ComposeFragment())
-            updateBottomNavSelection(1)
-        }
     }
 
     private fun updateBottomNavSelection(index: Int) {
