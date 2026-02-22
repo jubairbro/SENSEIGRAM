@@ -75,7 +75,7 @@ Get the latest APK from [Releases](https://github.com/jubairbro/SENSEIGRAM/relea
 
 - **Telegram:** [@JubairSensei](https://t.me/JubairSensei)
 - **YouTube:** [@JubairSensei](https://youtube.com/@JubairSensei)
-- **Support Group:** [@SenseiGramSupport](https://t.me/SenseiGramSupport)
+- **Support Group:** [@JubairZ](https://t.me/all_to_bn)
 
 ---
 
