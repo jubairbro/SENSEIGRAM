@@ -19,7 +19,6 @@ import com.senseigram.ui.adapters.DraftsAdapter
 import com.senseigram.ui.compose.ComposeActivity
 import com.senseigram.ui.login.LoginActivity
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             val chatId = dialogBinding.chatIdInput.text.toString().trim()
             
             if (name.isEmpty() || chatId.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_fill_fields, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -127,9 +126,9 @@ class MainActivity : AppCompatActivity() {
                     prefs.addChat(savedChat)
                     loadData()
                     dialog.dismiss()
-                    Toast.makeText(this@MainActivity, "Chat saved!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, R.string.chat_saved, Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@MainActivity, "Invalid chat ID", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, R.string.error_invalid_chat, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -141,7 +140,7 @@ class MainActivity : AppCompatActivity() {
     private fun confirmDeleteChat(chat: SavedChat) {
         AlertDialog.Builder(this)
             .setTitle(R.string.confirm_delete)
-            .setMessage("Delete ${chat.title}?")
+            .setMessage(getString(R.string.confirm_delete_msg, chat.title))
             .setPositiveButton(R.string.delete) { _, _ ->
                 prefs.removeChat(chat.id)
                 loadData()

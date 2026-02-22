@@ -5,12 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.senseigram.R
 import com.senseigram.data.MessageDraft
 import com.senseigram.databinding.ItemDraftBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class DraftsAdapter(
     private val onItemClick: (MessageDraft) -> Unit,
@@ -19,8 +15,8 @@ class DraftsAdapter(
     
     inner class VH(val binding: ItemDraftBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MessageDraft) {
-            binding.draftChatIdText.text = item.chatId.ifEmpty { "Unknown" }
-            binding.draftPreviewText.text = item.text.ifEmpty { "(Empty message)" }
+            binding.draftChatIdText.text = item.chatId.ifEmpty { itemView.context.getString(com.senseigram.R.string.unknown_chat) }
+            binding.draftPreviewText.text = item.text.ifEmpty { itemView.context.getString(com.senseigram.R.string.empty_message) }
             binding.root.setOnClickListener { onItemClick(item) }
             binding.deleteDraftButton.setOnClickListener { onDeleteClick(item) }
             binding.editDraftButton.setOnClickListener { onItemClick(item) }
