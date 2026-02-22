@@ -19,7 +19,7 @@
     </style>
 
     <!-- Dark Theme -->
-    <style name="Theme.SenseiGram.Dark" parent="Theme.MaterialComponents.Dark.NoActionBar">
+    <style name="Theme.SenseiGram.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
@@ -37,7 +37,7 @@
     </style>
 
     <!-- AMOLED Theme -->
-    <style name="Theme.SenseiGram.Amoled" parent="Theme.MaterialComponents.Dark.NoActionBar">
+    <style name="Theme.SenseiGram.Amoled" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
