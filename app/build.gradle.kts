@@ -17,10 +17,13 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("senseigram.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "senseigram"
-            keyAlias = System.getenv("KEY_ALIAS") ?: "senseigram"
-            keyPassword = System.getenv("KEY_PASSWORD") ?: "senseigram"
+            val keystoreFile = file("senseigram.jks")
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "senseigram"
+                keyAlias = System.getenv("KEY_ALIAS") ?: "senseigram"
+                keyPassword = System.getenv("KEY_PASSWORD") ?: "senseigram"
+            }
         }
     }
 
@@ -31,13 +34,16 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            val keystoreFile = file("senseigram.jks")
+            if (keystoreFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
     
     kotlinOptions {
