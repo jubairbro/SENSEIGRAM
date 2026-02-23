@@ -465,11 +465,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun logout() {
-        prefs.token = ""
-        prefs.botName = ""
-        prefs.botUsername = ""
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.disconnect)
+            .setMessage("Are you sure you want to disconnect?")
+            .setPositiveButton(R.string.disconnect) { _, _ ->
+                prefs.token = ""
+                prefs.botName = ""
+                prefs.botUsername = ""
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     override fun onBackPressed() {

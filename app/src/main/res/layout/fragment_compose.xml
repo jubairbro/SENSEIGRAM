@@ -403,7 +403,7 @@
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Bold"
-                android:src="@drawable/ic_compose"
+                android:src="@drawable/ic_bold"
                 app:tint="@color/text_secondary_light"
                 android:padding="@dimen/spacing_sm" />
 
@@ -413,7 +413,7 @@
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Italic"
-                android:src="@drawable/ic_edit"
+                android:src="@drawable/ic_italic"
                 app:tint="@color/text_secondary_light"
                 android:padding="@dimen/spacing_sm" />
 
@@ -423,7 +423,7 @@
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Code"
-                android:src="@drawable/ic_settings"
+                android:src="@drawable/ic_code"
                 app:tint="@color/text_secondary_light"
                 android:padding="@dimen/spacing_sm" />
 

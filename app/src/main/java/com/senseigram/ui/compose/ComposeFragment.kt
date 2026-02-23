@@ -337,20 +337,40 @@ class ComposeFragment : Fragment() {
     }
 
     private fun insertLinkTag() {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val sheetBinding = com.senseigram.databinding.BottomSheetLinkBinding.inflate(layoutInflater)
+        dialog.setContentView(sheetBinding.root)
+        
         val start = binding.messageInput.selectionStart
         val end = binding.messageInput.selectionEnd
         val text = binding.messageInput.text ?: return
-
-        if (start == end) {
-            val linkTemplate = "<a href=\"URL\">text</a>"
-            text.insert(start, linkTemplate)
-            binding.messageInput.setSelection(start + 9, start + 12) // Select "URL"
-        } else {
-            val selectedText = text.subSequence(start, end).toString()
-            val replacement = "<a href=\"URL\">$selectedText</a>"
-            text.replace(start, end, replacement)
-            binding.messageInput.setSelection(start + 9, start + 12) // Select "URL"
+        
+        if (start != end) {
+            sheetBinding.linkTextInput.setText(text.subSequence(start, end).toString())
         }
+        
+        sheetBinding.insertLinkBtn.setOnClickListener {
+            val linkText = sheetBinding.linkTextInput.text.toString().trim()
+            val linkUrl = sheetBinding.linkUrlInput.text.toString().trim()
+            
+            if (linkUrl.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter a URL", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            val displayText = linkText.ifEmpty { linkUrl }
+            val replacement = "<a href=\"$linkUrl\">$displayText</a>"
+            
+            if (start != end) {
+                text.replace(start, end, replacement)
+            } else {
+                text.insert(start, replacement)
+            }
+            
+            dialog.dismiss()
+        }
+        
+        dialog.show()
     }
 
     // ─── Inline Buttons Builder ─────────────────────────────────────
