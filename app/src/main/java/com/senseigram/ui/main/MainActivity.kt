@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity() {
                         else -> "Unknown"
                     }
                     sheetBinding.lookupTitle.text = displayName
-                    sheetBinding.lookupType.text = chat.type
+                    sheetBinding.lookupType.text = chat.type.uppercase()
                     sheetBinding.lookupId.text = "ID: ${chat.id}"
                     
                     if (!chat.username.isNullOrEmpty()) {
@@ -365,6 +365,22 @@ class MainActivity : AppCompatActivity() {
                         sheetBinding.lookupUsername.text = "@${chat.username}"
                     } else {
                         sheetBinding.lookupUsername.visibility = View.GONE
+                    }
+                    
+                    // Members count
+                    if (chat.membersCount != null) {
+                        sheetBinding.lookupMembers.visibility = View.VISIBLE
+                        sheetBinding.lookupMembers.text = "Members: ${String.format("%,d", chat.membersCount)}"
+                    } else {
+                        sheetBinding.lookupMembers.visibility = View.GONE
+                    }
+                    
+                    // Description
+                    if (!chat.description.isNullOrEmpty()) {
+                        sheetBinding.lookupDescription.visibility = View.VISIBLE
+                        sheetBinding.lookupDescription.text = chat.description
+                    } else {
+                        sheetBinding.lookupDescription.visibility = View.GONE
                     }
                 } else {
                     sheetBinding.lookupResult.visibility = View.GONE
@@ -480,6 +496,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        if (currentFocus != null && imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)) {
+            return
+        }
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else if (currentFragment !is HomeFragment) {

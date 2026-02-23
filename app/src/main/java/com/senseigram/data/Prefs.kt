@@ -168,7 +168,16 @@ class Prefs(private val ctx: Context) {
 }
 
 data class Bot(val id: Long, val name: String, val username: String?)
-data class Chat(val id: Long, val title: String?, val username: String?, val type: String, val firstName: String? = null, val lastName: String? = null)
+data class Chat(
+    val id: Long, 
+    val title: String?, 
+    val username: String?, 
+    val type: String, 
+    val firstName: String? = null, 
+    val lastName: String? = null,
+    val description: String? = null,
+    val membersCount: Int? = null
+)
 data class ChatLookupResult(val chat: Chat?, val error: String?)
 data class SavedChat(val id: Long, val title: String, val type: String, val time: Long)
 data class InlineBtn(val text: String, val url: String?, val callback: String?, val style: Int = 0)

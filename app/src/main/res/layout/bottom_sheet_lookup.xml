@@ -107,7 +107,27 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="monospace"
                 android:textColor="@color/text_tertiary_light"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:textIsSelectable="true" />
+
+            <TextView
+                android:id="@+id/lookupMembers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_primary_light"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/lookupDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary_light"
+                android:textSize="12sp"
+                android:visibility="gone" />
 
         </LinearLayout>
 

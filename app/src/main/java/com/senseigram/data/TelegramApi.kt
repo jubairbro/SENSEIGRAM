@@ -44,7 +44,9 @@ object TelegramApi {
                     r.optString("username").ifEmpty { null },
                     r.getString("type"),
                     r.optString("first_name").ifEmpty { null },
-                    r.optString("last_name").ifEmpty { null }
+                    r.optString("last_name").ifEmpty { null },
+                    r.optString("description").ifEmpty { null },
+                    if (r.has("members_count")) r.getInt("members_count") else null
                 )
                 ChatLookupResult(chat, null)
             } else {
