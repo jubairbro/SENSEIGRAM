@@ -20,7 +20,7 @@
             
             <item
                 android:id="@+id/nav_accent"
-                android:icon="@drawable/ic_pen"
+                android:icon="@drawable/ic_palette"
                 android:title="@string/color_accent" />
         </menu>
     </item>
@@ -39,14 +39,18 @@
             
             <item
                 android:id="@+id/nav_channels"
-                android:icon="@drawable/ic_chat"
+                android:icon="@drawable/ic_target"
                 android:title="@string/targets" />
         </menu>
     </item>
 
-    <item
-        android:id="@+id/nav_disconnect"
-        android:icon="@drawable/ic_close"
-        android:title="@string/disconnect" />
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_disconnect"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/disconnect" />
+        </menu>
+    </item>
 
 </menu>

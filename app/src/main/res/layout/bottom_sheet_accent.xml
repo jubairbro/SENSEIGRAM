@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_accent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Choose your accent color"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/accentEmerald"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_color_selector"
+            android:contentDescription="Emerald"
+            android:src="@drawable/ic_check"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:backgroundTint="@color/emerald" />
+
+        <ImageButton
+            android:id="@+id/accentBlue"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_color_selector"
+            android:contentDescription="Blue"
+            android:src="@drawable/ic_check"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:backgroundTint="@color/blue_accent" />
+
+        <ImageButton
+            android:id="@+id/accentViolet"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_color_selector"
+            android:contentDescription="Violet"
+            android:src="@drawable/ic_check"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:backgroundTint="@color/violet" />
+
+        <ImageButton
+            android:id="@+id/accentRose"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_color_selector"
+            android:contentDescription="Rose"
+            android:src="@drawable/ic_check"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:backgroundTint="@color/rose" />
+
+        <ImageButton
+            android:id="@+id/accentAmber"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_color_selector"
+            android:contentDescription="Amber"
+            android:src="@drawable/ic_check"
+            android:padding="12dp"
+            app:tint="@color/white"
+            android:backgroundTint="@color/amber" />
+
+    </LinearLayout>
+
+</LinearLayout>

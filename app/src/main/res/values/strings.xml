@@ -8,7 +8,8 @@
     <string name="login_title">SenseiGram</string>
     <string name="login_subtitle">Connect your Telegram Bot to get started</string>
     <string name="hint_bot_token">Bot API Token</string>
-    <string name="token_hint">Get your token from @BotFather on Telegram</string>
+    <string name="hint_bot_token_short">Bot Token</string>
+    <string name="token_hint">Get your token from BotFather on Telegram</string>
     <string name="btn_connect">Connect Bot</string>
     <string name="validating">Validating…</string>
 
@@ -74,6 +75,8 @@
     <string name="about_app">About App</string>
     <string name="version_info">SenseiGram v1.0\nBy @JubairSensei</string>
     <string name="not_found">Not Found: %s</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
 
     <!-- Compose -->
     <string name="compose_message">Compose Message</string>
