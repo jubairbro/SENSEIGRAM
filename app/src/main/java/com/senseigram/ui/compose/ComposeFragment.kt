@@ -677,9 +677,8 @@ class ComposeFragment : Fragment() {
         binding.mediaUrlInput.text?.clear()
         binding.manualChatIdInput.text?.clear()
         binding.postLinkInput.text?.clear()
-        binding.btnLabelInput.text?.clear()
-        binding.btnUrlInput.text?.clear()
         buttonRowAdapter.clear()
+        updateInlineButtonCount()
         selectedFileUri = null
         selectedFileName = null
         binding.fileNameText.text = getString(R.string.choose_file)
@@ -688,10 +687,11 @@ class ComposeFragment : Fragment() {
         binding.hidePreviewCheck.isChecked = false
         binding.spoilerCheck.isChecked = false
         mediaType = MediaType.TEXT
-        binding.mediaInputSection.visibility = View.GONE
-        binding.mediaTypeLabel.visibility = View.GONE
+        isUploadMode = false
+        isEditMode = false
+        updateModeUI()
         updateMediaButtonStates()
-        updateEditorLabel()
+        updateUploadLinkMode()
     }
 
     private fun uriToFile(uri: Uri): File? {
