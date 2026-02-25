@@ -34,6 +34,7 @@
 
     <!-- Component Sizes -->
     <dimen name="button_height">48dp</dimen>
+    <dimen name="button_height_md">44dp</dimen>
     <dimen name="button_height_lg">56dp</dimen>
     <dimen name="input_height">52dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
