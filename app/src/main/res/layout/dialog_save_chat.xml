@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_chat"
-        android:textColor="@color/text_primary_light"
+        android:textColor="?android:textColorPrimary"
         android:textSize="@dimen/text_xl"
         android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
-            android:textColor="@color/text_secondary_light" />
+            android:textColor="?android:textColorSecondary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"

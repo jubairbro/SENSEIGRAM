@@ -12,7 +12,7 @@
         android:text="@string/appearance"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary_light" />
+        android:textColor="?android:textColorPrimary" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginTop="16dp"
         android:text="Select Theme"
         android:textSize="14sp"
-        android:textColor="@color/text_secondary_light" />
+        android:textColor="?android:textColorSecondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_sun"
-                app:tint="@color/text_tertiary_light" />
+                app:tint="?android:textColorTertiary" />
 
             <TextView
                 android:id="@+id/themeLightLabel"
@@ -52,7 +52,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/theme_light"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary_light" />
+                android:textColor="?android:textColorSecondary" />
 
         </LinearLayout>
 
@@ -71,7 +71,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_moon"
-                app:tint="@color/text_tertiary_light" />
+                app:tint="?android:textColorTertiary" />
 
             <TextView
                 android:id="@+id/themeDarkLabel"
@@ -80,7 +80,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/theme_dark"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary_light" />
+                android:textColor="?android:textColorSecondary" />
 
         </LinearLayout>
 
@@ -99,7 +99,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_smartphone"
-                app:tint="@color/text_tertiary_light" />
+                app:tint="?android:textColorTertiary" />
 
             <TextView
                 android:id="@+id/themeAmoledLabel"
@@ -108,7 +108,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/theme_amoled"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary_light" />
+                android:textColor="?android:textColorSecondary" />
 
         </LinearLayout>
 
@@ -127,7 +127,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_monitor"
-                app:tint="@color/text_tertiary_light" />
+                app:tint="?android:textColorTertiary" />
 
             <TextView
                 android:id="@+id/themeSystemLabel"
@@ -136,7 +136,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/theme_system"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary_light" />
+                android:textColor="?android:textColorSecondary" />
 
         </LinearLayout>
 

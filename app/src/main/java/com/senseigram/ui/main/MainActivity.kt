@@ -147,7 +147,10 @@ class MainActivity : AppCompatActivity() {
         val composeText = binding.navComposeBtn.getChildAt(1) as? android.widget.TextView
         
         val accentColor = AccentColors.getPrimary(prefs.accent)
-        val defaultColor = resources.getColor(R.color.text_secondary_light, null)
+        
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultColor = typedValue.data
         
         if (index == 0) {
             homeIcon?.setColorFilter(accentColor)
@@ -220,8 +223,13 @@ class MainActivity : AppCompatActivity() {
     private fun updateThemeHighlight(sheetBinding: BottomSheetThemeBinding) {
         val currentTheme = prefs.theme
         val accentColor = AccentColors.getPrimary(prefs.accent)
-        val defaultColor = resources.getColor(R.color.text_tertiary_light, null)
-        val defaultTextColor = resources.getColor(R.color.text_secondary_light, null)
+        
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(android.R.attr.textColorTertiary, typedValue, true)
+        val defaultColor = typedValue.data
+        
+        theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultTextColor = typedValue.data
 
         sheetBinding.themeLightIcon.setColorFilter(if (currentTheme == 0) accentColor else defaultColor)
         sheetBinding.themeDarkIcon.setColorFilter(if (currentTheme == 1) accentColor else defaultColor)

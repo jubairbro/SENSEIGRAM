@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/appearance"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
@@ -82,7 +82,7 @@
                         android:layout_height="@dimen/icon_md"
                         android:src="@drawable/ic_sun"
                         android:contentDescription="@null"
-                        app:tint="@color/text_tertiary_light" />
+                        app:tint="?android:textColorTertiary" />
                     <TextView
                         android:id="@+id/themeLightLabel"
                         android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
                         android:text="@string/theme_light"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
-                        android:textColor="@color/text_secondary_light" />
+                        android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -108,7 +108,7 @@
                         android:layout_height="@dimen/icon_md"
                         android:src="@drawable/ic_moon"
                         android:contentDescription="@null"
-                        app:tint="@color/text_tertiary_light" />
+                        app:tint="?android:textColorTertiary" />
                     <TextView
                         android:id="@+id/themeDarkLabel"
                         android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
                         android:text="@string/theme_dark"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
-                        android:textColor="@color/text_secondary_light" />
+                        android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -134,7 +134,7 @@
                         android:layout_height="@dimen/icon_md"
                         android:src="@drawable/ic_smartphone"
                         android:contentDescription="@null"
-                        app:tint="@color/text_tertiary_light" />
+                        app:tint="?android:textColorTertiary" />
                     <TextView
                         android:id="@+id/themeAmoledLabel"
                         android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                         android:text="@string/theme_amoled"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
-                        android:textColor="@color/text_secondary_light" />
+                        android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -160,7 +160,7 @@
                         android:layout_height="@dimen/icon_md"
                         android:src="@drawable/ic_monitor"
                         android:contentDescription="@null"
-                        app:tint="@color/text_tertiary_light" />
+                        app:tint="?android:textColorTertiary" />
                     <TextView
                         android:id="@+id/themeSystemLabel"
                         android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                         android:text="@string/theme_system"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
-                        android:textColor="@color/text_secondary_light" />
+                        android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -190,12 +190,12 @@
                 android:drawablePadding="@dimen/spacing_sm"
                 android:text="@string/connection"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
                 android:layout_marginBottom="@dimen/spacing_lg"
-                app:drawableTint="@color/text_tertiary_light" />
+                app:drawableTint="?android:textColorTertiary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -216,7 +216,7 @@
                     android:paddingHorizontal="@dimen/spacing_md"
                     android:textSize="@dimen/text_md"
                     android:fontFamily="monospace"
-                    app:drawableTint="@color/text_tertiary_light" />
+                    app:drawableTint="?android:textColorTertiary" />
 
                 <ImageButton
                     android:id="@+id/toggleTokenVisibility"
@@ -227,7 +227,7 @@
                     android:src="@drawable/ic_eye_off"
                     android:padding="@dimen/spacing_md"
                     android:contentDescription="Toggle visibility"
-                    app:tint="@color/text_secondary_light" />
+                    app:tint="?android:textColorSecondary" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -239,7 +239,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_md"
-                app:backgroundTint="@color/text_primary_light"
+                app:backgroundTint="?android:textColorPrimary"
                 android:textColor="@color/white"
                 app:cornerRadius="@dimen/corner_md" />
 
@@ -262,13 +262,23 @@
 
                 <TextView
                     android:id="@+id/connectedText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_md"
                     android:textColor="@color/primary"
                     android:textSize="@dimen/text_md"
                     android:textStyle="bold"
                     tools:text="Connected: @my_bot" />
+                    
+                <ImageButton
+                    android:id="@+id/editBotProfileBtn"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_edit"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/primary"
+                    android:contentDescription="Edit Bot Profile" />
             </LinearLayout>
         </LinearLayout>
 
@@ -288,12 +298,12 @@
                 android:drawablePadding="@dimen/spacing_sm"
                 android:text="@string/lookup_info"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
                 android:layout_marginBottom="@dimen/spacing_lg"
-                app:drawableTint="@color/text_tertiary_light" />
+                app:drawableTint="?android:textColorTertiary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -371,7 +381,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAllCaps="true"
-                            android:textColor="@color/text_tertiary_light"
+                            android:textColor="?android:textColorTertiary"
                             android:textSize="@dimen/text_xs"
                             android:textStyle="bold"
                             android:letterSpacing="0.08"
@@ -418,12 +428,12 @@
                 android:drawablePadding="@dimen/spacing_sm"
                 android:text="@string/targets"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
                 android:layout_marginBottom="@dimen/spacing_lg"
-                app:drawableTint="@color/text_tertiary_light" />
+                app:drawableTint="?android:textColorTertiary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -454,6 +464,17 @@
                     app:tint="@color/white"
                     app:backgroundTint="@color/primary" />
             </LinearLayout>
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fetchUsersBtn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_sm"
+                android:text="Fetch recent users"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_bot"
+                app:iconGravity="textStart" />
 
             <!-- Empty state -->
             <TextView
@@ -464,7 +485,7 @@
                 android:gravity="center"
                 android:padding="@dimen/spacing_xl"
                 android:text="@string/no_channels"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:visibility="gone" />
 
@@ -484,7 +505,7 @@
             android:paddingHorizontal="@dimen/spacing_sm"
             android:text="@string/settings_label"
             android:textAllCaps="true"
-            android:textColor="@color/text_tertiary_light"
+            android:textColor="?android:textColorTertiary"
             android:textSize="@dimen/text_xs"
             android:textStyle="bold"
             android:letterSpacing="0.08" />
@@ -558,7 +579,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_label"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_sm"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
@@ -588,7 +609,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/smooth_scroll_desc"
-                        android:textColor="@color/text_tertiary_light"
+                        android:textColor="?android:textColorTertiary"
                         android:textSize="@dimen/text_xs" />
                 </LinearLayout>
 
@@ -623,7 +644,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/haptic_feedback_desc"
-                        android:textColor="@color/text_tertiary_light"
+                        android:textColor="?android:textColorTertiary"
                         android:textSize="@dimen/text_xs" />
                 </LinearLayout>
 

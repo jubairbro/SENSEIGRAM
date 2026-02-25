@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurface">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_xl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Bot Profile"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_md"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bot Name"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/text_xs"
+            android:textStyle="bold" />
+            
+        <EditText
+            android:id="@+id/botNameInput"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_height"
+            android:background="@drawable/bg_input"
+            android:hint="New Bot Name"
+            android:inputType="text"
+            android:paddingHorizontal="@dimen/spacing_md"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?android:textColorSecondary"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginBottom="@dimen/spacing_md" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bot Description (About)"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/text_xs"
+            android:textStyle="bold" />
+            
+        <EditText
+            android:id="@+id/botDescInput"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_input"
+            android:gravity="top|start"
+            android:hint="What can this bot do?"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/spacing_md"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?android:textColorSecondary"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginBottom="@dimen/spacing_md" />
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bot Short Description"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/text_xs"
+            android:textStyle="bold" />
+            
+        <EditText
+            android:id="@+id/botShortDescInput"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_input"
+            android:gravity="top|start"
+            android:hint="Brief description on profile"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/spacing_md"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?android:textColorSecondary"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginBottom="@dimen/spacing_md" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile Photo"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/text_xs"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_xs">
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUploadPhoto"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Upload Photo"
+                android:textAllCaps="false"
+                app:cornerRadius="@dimen/corner_md" />
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRemovePhoto"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove"
+                android:textColor="@color/error_text"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveBotProfile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="Save Changes"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:cornerRadius="@dimen/corner_md" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

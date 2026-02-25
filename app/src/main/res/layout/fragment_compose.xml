@@ -179,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/attach"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_xs"
                 android:textStyle="bold"
                 android:paddingEnd="@dimen/spacing_sm" />
@@ -192,7 +192,7 @@
                 android:src="@drawable/ic_image"
                 android:padding="@dimen/spacing_sm"
                 android:contentDescription="@string/type_photo"
-                app:tint="@color/text_secondary_light" />
+                app:tint="?android:textColorSecondary" />
 
             <ImageButton
                 android:id="@+id/attachVideo"
@@ -203,7 +203,7 @@
                 android:src="@drawable/ic_video"
                 android:padding="@dimen/spacing_sm"
                 android:contentDescription="@string/type_video"
-                app:tint="@color/text_secondary_light" />
+                app:tint="?android:textColorSecondary" />
 
             <ImageButton
                 android:id="@+id/attachDocument"
@@ -214,7 +214,7 @@
                 android:src="@drawable/ic_file"
                 android:padding="@dimen/spacing_sm"
                 android:contentDescription="@string/type_document"
-                app:tint="@color/text_secondary_light" />
+                app:tint="?android:textColorSecondary" />
 
             <!-- Media type label -->
             <TextView
@@ -223,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_xs"
                 android:visibility="gone"
                 tools:text="Sending Photo"
@@ -305,7 +305,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/max_file_size"
-                        android:textColor="@color/text_tertiary_light"
+                        android:textColor="?android:textColorTertiary"
                         android:textSize="@dimen/text_xs" />
                 </LinearLayout>
 
@@ -359,7 +359,7 @@
                 android:layout_weight="1"
                 android:text="@string/message_text"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_xs"
                 android:textStyle="bold" />
 
@@ -404,7 +404,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Bold"
                 android:src="@drawable/ic_bold"
-                app:tint="@color/text_secondary_light"
+                app:tint="?android:textColorSecondary"
                 android:padding="@dimen/spacing_sm" />
 
             <ImageButton
@@ -414,7 +414,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Italic"
                 android:src="@drawable/ic_italic"
-                app:tint="@color/text_secondary_light"
+                app:tint="?android:textColorSecondary"
                 android:padding="@dimen/spacing_sm" />
 
             <ImageButton
@@ -424,7 +424,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Code"
                 android:src="@drawable/ic_code"
-                app:tint="@color/text_secondary_light"
+                app:tint="?android:textColorSecondary"
                 android:padding="@dimen/spacing_sm" />
 
             <ImageButton
@@ -434,7 +434,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Link"
                 android:src="@drawable/ic_link"
-                app:tint="@color/text_secondary_light"
+                app:tint="?android:textColorSecondary"
                 android:padding="@dimen/spacing_sm" />
 
             <ImageButton
@@ -444,7 +444,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Spoiler"
                 android:src="@drawable/ic_eye_off"
-                app:tint="@color/text_secondary_light"
+                app:tint="?android:textColorSecondary"
                 android:padding="@dimen/spacing_sm" />
         </LinearLayout>
 
@@ -484,98 +484,22 @@
         </LinearLayout>
 
         <!-- Inline Buttons Builder -->
-        <LinearLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/openInlineButtonsBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height_md"
             android:layout_marginTop="@dimen/spacing_lg"
-            android:background="@drawable/bg_input"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_lg">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/inline_buttons"
-                android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
-                android:textSize="@dimen/text_xs"
-                android:textStyle="bold"
-                android:letterSpacing="0.08" />
-
-            <!-- Button rows preview -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/buttonsPreviewRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_sm"
-                android:nestedScrollingEnabled="false" />
-
-            <!-- Add button inputs -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_sm"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/btnLabelInput"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/bg_card"
-                    android:hint="@string/button_label"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingHorizontal="@dimen/spacing_md"
-                    android:textSize="@dimen/text_md" />
-
-                <EditText
-                    android:id="@+id/btnUrlInput"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="3"
-                    android:layout_marginStart="@dimen/spacing_sm"
-                    android:background="@drawable/bg_card"
-                    android:hint="@string/button_url_hint"
-                    android:inputType="textUri"
-                    android:maxLines="1"
-                    android:paddingHorizontal="@dimen/spacing_md"
-                    android:textSize="@dimen/text_md" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_sm"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addToRowBtn"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="@string/add_to_row"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/text_xs"
-                    android:textStyle="bold"
-                    app:cornerRadius="@dimen/corner_md" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/newRowBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_sm"
-                    android:text="@string/new_row"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/text_xs"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/primary_bg"
-                    android:textColor="@color/primary"
-                    app:cornerRadius="@dimen/corner_md" />
-            </LinearLayout>
-        </LinearLayout>
+            android:text="Add Inline Buttons"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:cornerRadius="@dimen/corner_lg"
+            app:icon="@drawable/ic_link"
+            app:iconTint="?attr/colorPrimary"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/spacing_sm" />
 
         <!-- Send Button -->
         <com.google.android.material.button.MaterialButton

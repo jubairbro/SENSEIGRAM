@@ -100,11 +100,15 @@ class ComposeFragment : Fragment() {
     private fun updateModeUI() {
         val accentColor = prefs.let { com.senseigram.data.AccentColors.getPrimary(it.accent) }
 
+        val typedValue = android.util.TypedValue()
+        requireContext().theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultTextColor = typedValue.data
+
         if (!isEditMode) {
             binding.newPostTab.setBackgroundColor(accentColor)
             binding.newPostTab.setTextColor(resources.getColor(R.color.white, null))
             binding.editPostTab.setBackgroundColor(0)
-            binding.editPostTab.setTextColor(resources.getColor(R.color.text_secondary_light, null))
+            binding.editPostTab.setTextColor(defaultTextColor)
 
             binding.newPostSection.visibility = View.VISIBLE
             binding.editPostSection.visibility = View.GONE
@@ -115,7 +119,7 @@ class ComposeFragment : Fragment() {
             binding.editPostTab.setBackgroundColor(accentColor)
             binding.editPostTab.setTextColor(resources.getColor(R.color.white, null))
             binding.newPostTab.setBackgroundColor(0)
-            binding.newPostTab.setTextColor(resources.getColor(R.color.text_secondary_light, null))
+            binding.newPostTab.setTextColor(defaultTextColor)
 
             binding.newPostSection.visibility = View.GONE
             binding.editPostSection.visibility = View.VISIBLE
@@ -248,7 +252,9 @@ class ComposeFragment : Fragment() {
 
     private fun updateMediaButtonStates() {
         val accentColor = com.senseigram.data.AccentColors.getPrimary(prefs.accent)
-        val defaultTint = resources.getColor(R.color.text_secondary_light, null)
+        val typedValue = android.util.TypedValue()
+        requireContext().theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultTint = typedValue.data
 
         binding.attachPhoto.setColorFilter(if (mediaType == MediaType.PHOTO) accentColor else defaultTint)
         binding.attachVideo.setColorFilter(if (mediaType == MediaType.VIDEO) accentColor else defaultTint)
@@ -294,7 +300,9 @@ class ComposeFragment : Fragment() {
 
     private fun updateUploadLinkMode() {
         val accentColor = com.senseigram.data.AccentColors.getPrimary(prefs.accent)
-        val defaultTint = resources.getColor(R.color.text_secondary_light, null)
+        val typedValue = android.util.TypedValue()
+        requireContext().theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultTint = typedValue.data
 
         if (isUploadMode) {
             binding.uploadToggle.setTextColor(accentColor)
@@ -378,34 +386,82 @@ class ComposeFragment : Fragment() {
     private fun setupInlineButtons() {
         buttonRowAdapter = ButtonRowAdapter { position ->
             buttonRowAdapter.removeRow(position)
+            updateInlineButtonCount()
         }
-        binding.buttonsPreviewRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.buttonsPreviewRecycler.adapter = buttonRowAdapter
-
-        binding.addToRowBtn.setOnClickListener {
-            val label = binding.btnLabelInput.text.toString().trim()
-            val url = binding.btnUrlInput.text.toString().trim()
+        
+        binding.openInlineButtonsBtn.setOnClickListener {
+            showInlineButtonsDialog()
+        }
+    }
+    
+    private fun showInlineButtonsDialog() {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialogView = layoutInflater.inflate(R.layout.dialog_inline_buttons, null)
+        dialog.setContentView(dialogView)
+        
+        val recycler = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.buttonsPreviewRecycler)
+        val btnLabelInput = dialogView.findViewById<android.widget.EditText>(R.id.btnLabelInput)
+        val btnUrlInput = dialogView.findViewById<android.widget.EditText>(R.id.btnUrlInput)
+        val styleSpinner = dialogView.findViewById<android.widget.Spinner>(R.id.btnStyleSpinner)
+        val addToRowBtn = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.addToRowBtn)
+        val newRowBtn = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.newRowBtn)
+        val closeBtn = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.closeDialogBtn)
+        
+        val styleItems = listOf("Default", "Primary (Blue)", "Success (Green)", "Danger (Red)")
+        val styleAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, styleItems)
+        styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        styleSpinner.adapter = styleAdapter
+        
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = buttonRowAdapter
+        
+        addToRowBtn.setOnClickListener {
+            val label = btnLabelInput.text.toString().trim()
+            val url = btnUrlInput.text.toString().trim()
             if (label.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.error_fields_required, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val btn = InlineBtn(label, url.ifEmpty { null }, null, 0)
+            val btn = InlineBtn(label, url.ifEmpty { null }, null, styleSpinner.selectedItemPosition)
             buttonRowAdapter.addButtonToLastRow(btn)
-            binding.btnLabelInput.text?.clear()
-            binding.btnUrlInput.text?.clear()
+            btnLabelInput.text?.clear()
+            btnUrlInput.text?.clear()
+            updateInlineButtonCount()
         }
 
-        binding.newRowBtn.setOnClickListener {
-            val label = binding.btnLabelInput.text.toString().trim()
-            val url = binding.btnUrlInput.text.toString().trim()
+        newRowBtn.setOnClickListener {
+            val label = btnLabelInput.text.toString().trim()
+            val url = btnUrlInput.text.toString().trim()
             if (label.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.error_fields_required, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val btn = InlineBtn(label, url.ifEmpty { null }, null, 0)
+            val btn = InlineBtn(label, url.ifEmpty { null }, null, styleSpinner.selectedItemPosition)
             buttonRowAdapter.addButtonToNewRow(btn)
-            binding.btnLabelInput.text?.clear()
-            binding.btnUrlInput.text?.clear()
+            btnLabelInput.text?.clear()
+            btnUrlInput.text?.clear()
+            updateInlineButtonCount()
+        }
+        
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        
+        dialog.setOnDismissListener {
+            updateInlineButtonCount()
+            // Important: we need to null the adapter so it doesn't hold onto the dialog's recycler
+            recycler.adapter = null
+        }
+        
+        dialog.show()
+    }
+    
+    private fun updateInlineButtonCount() {
+        val count = buttonRowAdapter.getRows().sumOf { it.size }
+        if (count > 0) {
+            binding.openInlineButtonsBtn.text = "Edit Inline Buttons ($count)"
+        } else {
+            binding.openInlineButtonsBtn.text = getString(R.string.add_inline_buttons)
         }
     }
 

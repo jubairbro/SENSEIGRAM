@@ -32,6 +32,61 @@ object TelegramApi {
         } catch (e: Exception) { null }
     }
 
+    suspend fun getUpdates(token: String): List<Chat>? = withContext(Dispatchers.IO) {
+        try {
+            val res = call(token, "getUpdates")
+            if (res.optBoolean("ok")) {
+                val results = res.getJSONArray("result")
+                val chats = mutableListOf<Chat>()
+                for (i in 0 until results.length()) {
+                    val update = results.getJSONObject(i)
+                    if (update.has("message")) {
+                        val msg = update.getJSONObject("message")
+                        if (msg.has("chat")) {
+                            val r = msg.getJSONObject("chat")
+                            val chat = Chat(
+                                r.getLong("id"),
+                                r.optString("title").ifEmpty { null },
+                                r.optString("username").ifEmpty { null },
+                                r.getString("type"),
+                                r.optString("first_name").ifEmpty { null },
+                                r.optString("last_name").ifEmpty { null },
+                                r.optString("description").ifEmpty { null },
+                                if (r.has("members_count")) r.getInt("members_count") else null
+                            )
+                            if (chats.none { it.id == chat.id }) chats.add(chat)
+                        }
+                    }
+                }
+                chats
+            } else null
+        } catch (e: Exception) { null }
+    }
+
+    suspend fun setMyName(token: String, name: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply { put("name", name) }
+            val res = call(token, "setMyName", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true) else Result.failure(Exception(res.optString("description")))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun setMyDescription(token: String, description: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply { put("description", description) }
+            val res = call(token, "setMyDescription", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true) else Result.failure(Exception(res.optString("description")))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun setMyShortDescription(token: String, shortDescription: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply { put("short_description", shortDescription) }
+            val res = call(token, "setMyShortDescription", json.toString().toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true) else Result.failure(Exception(res.optString("description")))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
     suspend fun getChat(token: String, chatId: String): ChatLookupResult = withContext(Dispatchers.IO) {
         try {
             val body = FormBody.Builder().add("chat_id", chatId).build()
@@ -255,6 +310,24 @@ object TelegramApi {
         } catch (e: Exception) { Result.failure(e) }
     }
 
+    suspend fun setMyProfilePhoto(token: String, file: File): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val body = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("photo", file.name, file.asRequestBody("image/*".toMediaType()))
+                .build()
+            val res = call(token, "setMyProfilePhoto", body)
+            if (res.optBoolean("ok")) Result.success(true) else Result.failure(Exception(res.optString("description")))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun removeMyProfilePhoto(token: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val res = call(token, "removeMyProfilePhoto", "{}".toRequestBody("application/json".toMediaType()))
+            if (res.optBoolean("ok")) Result.success(true) else Result.failure(Exception(res.optString("description")))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
     private fun buildKeyboard(buttons: List<List<InlineBtn>>): JSONObject {
         val keyboard = JSONArray()
         buttons.forEach { row ->
@@ -264,6 +337,11 @@ object TelegramApi {
                     put("text", btn.text)
                     btn.url?.let { put("url", it) }
                     btn.callback?.let { put("callback_data", it) }
+                    when (btn.style) {
+                        1 -> put("style", "primary")
+                        2 -> put("style", "success")
+                        3 -> put("style", "danger")
+                    }
                 })
             }
             keyboard.put(rowArr)

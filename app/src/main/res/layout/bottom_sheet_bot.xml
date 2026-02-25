@@ -12,7 +12,7 @@
         android:text="@string/connection"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary_light" />
+        android:textColor="?android:textColorPrimary" />
 
     <LinearLayout
         android:id="@+id/connectedStatus"

@@ -12,7 +12,7 @@
         android:text="@string/targets"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary_light" />
+        android:textColor="?android:textColorPrimary" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginTop="4dp"
         android:text="Add channels, groups or users"
         android:textSize="13sp"
-        android:textColor="@color/text_secondary_light" />
+        android:textColor="?android:textColorSecondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/no_channels"
-        android:textColor="@color/text_tertiary_light"
+        android:textColor="?android:textColorTertiary"
         android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -41,7 +41,7 @@
                 android:paddingHorizontal="6dp"
                 android:paddingVertical="2dp"
                 android:textAllCaps="true"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_xs"
                 android:fontFamily="monospace"
                 tools:text="channel" />
@@ -54,7 +54,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:fontFamily="monospace"
-                android:textColor="@color/text_tertiary_light"
+                android:textColor="?android:textColorTertiary"
                 android:textSize="@dimen/text_xs"
                 tools:text="-1001234567" />
         </LinearLayout>

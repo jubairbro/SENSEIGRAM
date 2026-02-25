@@ -12,7 +12,7 @@
         android:text="@string/color_accent"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary_light" />
+        android:textColor="?android:textColorPrimary" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginTop="8dp"
         android:text="Choose your accent color"
         android:textSize="14sp"
-        android:textColor="@color/text_secondary_light" />
+        android:textColor="?android:textColorSecondary" />
 
     <LinearLayout
         android:layout_width="match_parent"

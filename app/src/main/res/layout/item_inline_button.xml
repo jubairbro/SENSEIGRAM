@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/spacing_md"
-    app:cardBackgroundColor="@color/surface_light"
+    app:cardBackgroundColor="?attr/colorSurface"
     app:cardCornerRadius="@dimen/corner_lg"
     app:cardElevation="@dimen/card_elevation">
 
@@ -30,8 +30,8 @@
                 android:hint="@string/button_text"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/text_primary_light"
-                android:textColorHint="@color/text_secondary_light"
+                android:textColor="?android:textColorPrimary"
+                android:textColorHint="?android:textColorSecondary"
                 android:textSize="@dimen/text_md" />
 
             <ImageButton
@@ -41,7 +41,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/delete"
                 android:src="@drawable/ic_close"
-                android:tint="@color/text_secondary_light" />
+                android:tint="?android:textColorSecondary" />
 
         </LinearLayout>
 
@@ -54,8 +54,8 @@
             android:hint="@string/button_url"
             android:inputType="textUri"
             android:maxLines="1"
-            android:textColor="@color/text_primary_light"
-            android:textColorHint="@color/text_secondary_light"
+            android:textColor="?android:textColorPrimary"
+            android:textColorHint="?android:textColorSecondary"
             android:textSize="@dimen/text_sm" />
 
         <LinearLayout
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/button_color"
-                android:textColor="@color/text_secondary_light"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="@dimen/text_sm" />
 
             <LinearLayout

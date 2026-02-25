@@ -25,7 +25,7 @@
                 android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="Hello, Sensei" />
@@ -34,7 +34,7 @@
                 android:id="@+id/subtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_secondary_light"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="13sp"
                 tools:text="3 channels connected" />
 
@@ -135,7 +135,7 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            app:cardBackgroundColor="@color/surface_variant_light"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -150,14 +150,14 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_save"
-                    app:tint="@color/text_primary_light" />
+                    app:tint="?android:textColorPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/drafts"
-                    android:textColor="@color/text_primary_light"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -173,7 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_lg"
         android:text="@string/your_channels"
-        android:textColor="@color/text_primary_light"
+        android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -201,14 +201,14 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_add"
             android:alpha="0.3"
-            app:tint="@color/text_tertiary_light" />
+            app:tint="?android:textColorTertiary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_md"
             android:text="@string/no_channels"
-            android:textColor="@color/text_tertiary_light"
+            android:textColor="?android:textColorTertiary"
             android:textSize="14sp" />
 
     </LinearLayout>

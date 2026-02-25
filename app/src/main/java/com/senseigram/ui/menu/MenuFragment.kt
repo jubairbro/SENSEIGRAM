@@ -79,8 +79,13 @@ class MenuFragment : Fragment() {
     private fun updateThemeHighlight() {
         val currentTheme = prefs.theme
         val accentColor = AccentColors.getPrimary(prefs.accent)
-        val defaultColor = resources.getColor(R.color.text_tertiary_light, null)
-        val defaultTextColor = resources.getColor(R.color.text_secondary_light, null)
+        
+        val typedValue = android.util.TypedValue()
+        requireContext().theme.resolveAttribute(android.R.attr.textColorTertiary, typedValue, true)
+        val defaultColor = typedValue.data
+        
+        requireContext().theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
+        val defaultTextColor = typedValue.data
 
         binding.themeLightIcon.setColorFilter(if (currentTheme == 0) accentColor else defaultColor)
         binding.themeDarkIcon.setColorFilter(if (currentTheme == 1) accentColor else defaultColor)
@@ -94,6 +99,15 @@ class MenuFragment : Fragment() {
     }
 
     // ─── Bot Connection ─────────────────────────────────────────────
+
+    private var profilePhotoUri: Uri? = null
+    
+    private val profilePhotoPicker = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            profilePhotoUri = result.data?.data
+            Toast.makeText(requireContext(), "Photo selected. Click Save to upload.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun setupBotConnection() {
         binding.tokenInput.setText(prefs.token)
@@ -136,8 +150,111 @@ class MenuFragment : Fragment() {
                 binding.validateBtn.text = getString(R.string.check_connection)
             }
         }
+        
+        binding.editBotProfileBtn.setOnClickListener {
+            showEditBotDialog()
+        }
 
         updateConnectionStatus()
+    }
+    
+    private fun showEditBotDialog() {
+        if (prefs.token.isEmpty()) {
+            Toast.makeText(requireContext(), R.string.error_bot_token_required, Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_bot, null)
+        dialog.setContentView(dialogView)
+        
+        val nameInput = dialogView.findViewById<android.widget.EditText>(R.id.botNameInput)
+        val descInput = dialogView.findViewById<android.widget.EditText>(R.id.botDescInput)
+        val shortDescInput = dialogView.findViewById<android.widget.EditText>(R.id.botShortDescInput)
+        val btnUploadPhoto = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnUploadPhoto)
+        val btnRemovePhoto = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnRemovePhoto)
+        val btnSave = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSaveBotProfile)
+        
+        nameInput.setText(prefs.botName)
+        profilePhotoUri = null
+        
+        btnUploadPhoto.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "image/*"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+            profilePhotoPicker.launch(intent)
+        }
+        
+        btnRemovePhoto.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val result = TelegramApi.removeMyProfilePhoto(prefs.token)
+                if (result.isSuccess) {
+                    Toast.makeText(requireContext(), "Profile photo removed", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to remove photo", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        
+        btnSave.setOnClickListener {
+            val newName = nameInput.text.toString().trim()
+            val newDesc = descInput.text.toString().trim()
+            val newShortDesc = shortDescInput.text.toString().trim()
+            
+            btnSave.isEnabled = false
+            btnSave.text = "Saving..."
+            
+            viewLifecycleOwner.lifecycleScope.launch {
+                var allSuccess = true
+                if (newName.isNotEmpty() && newName != prefs.botName) {
+                    val r = TelegramApi.setMyName(prefs.token, newName)
+                    if (r.isSuccess) prefs.botName = newName else allSuccess = false
+                }
+                if (newDesc.isNotEmpty()) {
+                    val r = TelegramApi.setMyDescription(prefs.token, newDesc)
+                    if (r.isFailure) allSuccess = false
+                }
+                if (newShortDesc.isNotEmpty()) {
+                    val r = TelegramApi.setMyShortDescription(prefs.token, newShortDesc)
+                    if (r.isFailure) allSuccess = false
+                }
+                if (profilePhotoUri != null) {
+                    val file = uriToFile(profilePhotoUri!!)
+                    if (file != null) {
+                        val r = TelegramApi.setMyProfilePhoto(prefs.token, file)
+                        if (r.isFailure) allSuccess = false
+                    }
+                }
+                
+                if (allSuccess) {
+                    Toast.makeText(requireContext(), "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                    updateConnectionStatus()
+                    dialog.dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "Some updates failed", Toast.LENGTH_SHORT).show()
+                    btnSave.isEnabled = true
+                    btnSave.text = "Save Changes"
+                }
+            }
+        }
+        
+        dialog.show()
+    }
+    
+    private fun uriToFile(uri: Uri): java.io.File? {
+        return try {
+            val ctx = requireContext()
+            val inputStream = ctx.contentResolver.openInputStream(uri) ?: return null
+            val tempFile = java.io.File(ctx.cacheDir, "profile_photo.jpg")
+            java.io.FileOutputStream(tempFile).use { out ->
+                inputStream.copyTo(out)
+            }
+            inputStream.close()
+            tempFile
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun updateConnectionStatus() {
@@ -254,6 +371,50 @@ class MenuFragment : Fragment() {
                     Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
                 }
                 binding.addChannelBtn.isEnabled = true
+            }
+        }
+        
+        binding.fetchUsersBtn.setOnClickListener {
+            val token = prefs.token
+            if (token.isEmpty()) {
+                Toast.makeText(requireContext(), R.string.error_bot_token_required, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            binding.fetchUsersBtn.isEnabled = false
+            binding.fetchUsersBtn.text = "Fetching..."
+            
+            viewLifecycleOwner.lifecycleScope.launch {
+                val updates = TelegramApi.getUpdates(token)
+                if (updates != null) {
+                    var added = 0
+                    val existing = prefs.getChats().map { it.id }
+                    
+                    for (chat in updates) {
+                        if (!existing.contains(chat.id)) {
+                            val savedChat = SavedChat(
+                                id = chat.id,
+                                title = chat.title ?: chat.firstName ?: chat.username ?: chat.id.toString(),
+                                type = chat.type,
+                                time = System.currentTimeMillis()
+                            )
+                            prefs.addChat(savedChat)
+                            added++
+                        }
+                    }
+                    
+                    refreshChannelsList()
+                    if (added > 0) {
+                        Toast.makeText(requireContext(), "Added $added new users/chats!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "No new users found.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch updates.", Toast.LENGTH_SHORT).show()
+                }
+                
+                binding.fetchUsersBtn.isEnabled = true
+                binding.fetchUsersBtn.text = "Fetch recent users"
             }
         }
 

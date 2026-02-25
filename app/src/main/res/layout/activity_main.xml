@@ -12,7 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light">
+        android:background="?attr/android:colorBackground">
 
         <!-- Top App Bar -->
         <com.google.android.material.appbar.AppBarLayout
@@ -26,9 +26,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIconTint="@color/text_primary_light"
-                app:titleTextColor="@color/text_primary_light"
-                app:subtitleTextColor="@color/text_secondary_light" />
+                app:navigationIconTint="?android:textColorPrimary"
+                app:titleTextColor="?android:textColorPrimary"
+                app:subtitleTextColor="?android:textColorSecondary" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -48,7 +48,7 @@
             android:layout_margin="12dp"
             app:cardCornerRadius="24dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/surface_light">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,14 +95,14 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_pen"
-                        android:tint="@color/text_secondary_light" />
+                        android:tint="?android:textColorSecondary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/nav_compose"
                         android:textSize="10sp"
-                        android:textColor="@color/text_secondary_light" />
+                        android:textColor="?android:textColorSecondary" />
 
                 </LinearLayout>
 
@@ -119,10 +119,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/surface_light"
+        android:background="?attr/colorSurface"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
-        app:itemTextColor="@color/text_primary_light"
+        app:itemTextColor="?android:textColorPrimary"
         app:itemIconTint="@color/primary" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -12,7 +12,7 @@
         android:text="@string/inline_buttons"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary_light" />
+        android:textColor="?android:textColorPrimary" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginTop="4dp"
         android:text="Add interactive buttons to your message"
         android:textSize="13sp"
-        android:textColor="@color/text_secondary_light" />
+        android:textColor="?android:textColorSecondary" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_marginTop="16dp"
         android:text="Button Text"
         android:textSize="12sp"
-        android:textColor="@color/text_tertiary_light" />
+        android:textColor="?android:textColorTertiary" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
         android:layout_marginTop="12dp"
         android:text="Button URL (optional for callback)"
         android:textSize="12sp"
-        android:textColor="@color/text_tertiary_light" />
+        android:textColor="?android:textColorTertiary" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

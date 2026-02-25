@@ -17,7 +17,7 @@
         android:padding="6dp"
         android:src="@drawable/ic_history"
         android:contentDescription="@null"
-        app:tint="@color/text_secondary_light" />
+        app:tint="?android:textColorSecondary" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/text_tertiary_light"
+            android:textColor="?android:textColorTertiary"
             android:textSize="@dimen/text_xs"
             tools:text="2:30 PM" />
     </LinearLayout>
@@ -50,6 +50,6 @@
         android:layout_height="@dimen/icon_sm"
         android:src="@drawable/ic_chevron_right"
         android:contentDescription="@null"
-        app:tint="@color/text_tertiary_light" />
+        app:tint="?android:textColorTertiary" />
 
 </LinearLayout>
